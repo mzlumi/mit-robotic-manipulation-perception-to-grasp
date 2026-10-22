@@ -1,0 +1,57 @@
+__pycache__/
+*.py[cod]
+
+.ruff_cache/
+.pytest_cache/
+
+.vscode/
+# VSCode workspace files
+*.code-workspace
+
+# No trailing slash: .venv here is a symlink to ../manipulation/.venv,
+# and git does not treat a symlink as a directory.
+.venv
+venv/
+
+.DS_Store
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+comment.cut
+auto/
+# latexmk writes a zero-byte tmpN.tmp probe into the build directory;
+# through device_bash it cannot unlink it afterwards, so it is left behind
+*.tmp
+
+# Emacs backups, autosaves and lock files
+*~
+\#*\#
+.\#*
+
+# The pset PDFs (ps<N>/ps<N>.pdf) are build products but deliberately
+# tracked, here and in the published handouts repo alike.
+
+misc/_to_delete/
+.claude/
+
+# Models, letters and scenarios the pset python writes at run time, and
+# regenerates if deleted (ps2 boxes, ps3 and ps4 letters and scenarios)
+ps*/assets/
+misc/ps4_plan_place_letter/assets/
+
+# Handout build area: dist/public is the instructor's clone of the public
+# handouts repo (make handout writes into it), dist/build is LaTeX aux
+dist/
+
+# Grading runs: keep the raw export, its staged/derived copies, and the
+# per-student reports out of git; rubric, scores and entry files are tracked.
+grading/ps*/assignment_*_export/
+grading/ps*/prep_*/
+grading/ps*/to_grade/
+grading/ps*/reports/
