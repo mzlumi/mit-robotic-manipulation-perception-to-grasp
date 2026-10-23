@@ -1,0 +1,435 @@
+# Copyright (c) 2020, Massachusetts Institute of Technology.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+#
+# * Neither the name of the copyright holder nor the names of its contributors
+#   may be used to endorse or promote products derived from this software
+#   without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+---
+name: CI
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  pull_request_target:
+    types:
+      - labeled
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 8 * * *'
+
+# Avoid multiplying native numerical-library threads across pytest workers.
+env:
+  OMP_NUM_THREADS: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  NUMEXPR_NUM_THREADS: '1'
+
+concurrency:
+  # Label-triggered runs must not cancel the regular pull-request checks.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  check-approval:
+    name: Check PR approval status
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+      is-trusted: ${{ steps.check.outputs.is-trusted }}
+    steps:
+      - name: Check approval status
+        id: check
+        run: |
+          if [[ "${{ github.event_name }}" != "pull_request_target" ]]; then
+            echo "is-trusted=true" >> $GITHUB_OUTPUT
+            echo "should-run=true" >> $GITHUB_OUTPUT
+            echo "✅ Push or scheduled event - running tests automatically"
+            exit 0
+          fi
+
+          if [[ "${{ github.event.pull_request.author_association }}" == "COLLABORATOR" ]] || \
+             [[ "${{ github.event.pull_request.author_association }}" == "MEMBER" ]] || \
+             [[ "${{ github.event.pull_request.author_association }}" == "OWNER" ]]; then
+            echo "is-trusted=true" >> $GITHUB_OUTPUT
+            echo "should-run=true" >> $GITHUB_OUTPUT
+            echo "✅ Trusted contributor - running tests automatically"
+          elif [[ "${{ contains(github.event.pull_request.labels.*.name, 'approved-for-ci') }}" == "true" ]]; then
+            echo "is-trusted=false" >> $GITHUB_OUTPUT
+            echo "should-run=true" >> $GITHUB_OUTPUT
+            echo "✅ First-time contributor approved via label - running tests"
+          else
+            echo "is-trusted=false" >> $GITHUB_OUTPUT
+            echo "should-run=false" >> $GITHUB_OUTPUT
+            echo "⏳ First-time contributor - waiting for maintainer approval"
+            echo "To approve this PR for CI, add the 'approved-for-ci' label"
+          fi
+
+  noble-poetry:
+    name: ubuntu noble using poetry
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    needs: [check-approval]
+    if: >
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+      ||
+      (github.event_name == 'pull_request_target' &&
+       github.event.pull_request.head.repo.full_name != github.repository &&
+       needs.check-approval.outputs.should-run == 'true')
+      ||
+      (github.event_name != 'pull_request' &&
+       github.event_name != 'pull_request_target')
+    steps:
+      - name: pre-checkout setup
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -o APT::Acquire::Retries=4 -qq
+          apt-get install -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy --no-install-recommends ca-certificates sudo git
+          # Create non-root user for running repository setup / tests
+          useradd -m -s /bin/bash runner
+          echo 'runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+        shell: bash
+
+      - name: checkout PR code
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: |
+            *
+            !.github
+          sparse-checkout-cone-mode: false
+
+      - name: checkout
+        if: github.event_name != 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: checkout solutions
+        env:
+          SOLUTIONS_TOKEN: ${{ secrets.SOLUTIONS_TOKEN }}
+        run: |
+          if [[ -z "${SOLUTIONS_TOKEN}" ]]; then
+            echo "SOLUTIONS_TOKEN not available; skipping solutions checkout"
+            exit 0
+          fi
+          git clone https://x-access-token:${SOLUTIONS_TOKEN}@github.com/RobotLocomotion/manipulation-solutions.git solutions
+          cd solutions && git checkout $(cat ../solutions_sha.txt) && cd ..
+        shell: bash
+
+      - name: install dependencies
+        run: |
+          # Fix ownership of the workspace
+          chown -R runner:runner .
+          # Switch to runner user for remaining commands
+          sudo -H -u runner ./setup/submodule_checkout
+          # Install system packages as root
+          INSTALL_JUPYTER=0 ./setup/ubuntu/24.04/install_prereqs.sh
+          sudo -H -u runner python3 -m pip install --user --break-system-packages poetry==2.1.4
+          sudo -H -u runner python3 -m poetry config virtualenvs.in-project true
+          sudo -H -u runner python3 -m poetry install --all-extras --with dev
+          rm -rf /var/cache/apt/archives/*.deb /var/cache/apt/archives/partial/*.deb /var/cache/apt/*.bin /var/lib/apt/lists/* /var/log/apt/*
+        shell: bash
+
+      - name: prefetch remote packages
+        run: |
+          sudo -H -u runner env XDG_CACHE_HOME=/tmp \
+            "$(pwd)/.venv/bin/python" -m setup.prefetch_remotes
+        shell: bash
+
+      - name: test
+        run: |
+          set -euo pipefail
+          VENV_PYTHON="$(pwd)/.venv/bin/python"
+          sudo --preserve-env=OMP_NUM_THREADS,OPENBLAS_NUM_THREADS,MKL_NUM_THREADS,NUMEXPR_NUM_THREADS \
+            -H -u runner env -u DISPLAY XDG_CACHE_HOME=/tmp \
+            DRAKE_ALLOW_NETWORK=lcm:meshcat "$VENV_PYTHON" -m pytest -n 2 --dist loadfile -ra --durations=30 --junitxml=test-results/pytest.xml
+        shell: bash
+
+      - name: upload test timings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-${{ github.job }}
+          path: test-results/pytest.xml
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # TODO(russt): add noble-pip-core workflow which only runs the tests in manipulation,
+  # but uses the manipulation module from pip.
+  noble-pip-all:
+    name: ubuntu noble using pip all
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    needs: [check-approval]
+    if: >
+      ((github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == github.repository)
+       ||
+       (github.event_name == 'pull_request_target' &&
+        github.event.pull_request.head.repo.full_name != github.repository &&
+        needs.check-approval.outputs.should-run == 'true')
+       ||
+       (github.event_name != 'pull_request' &&
+        github.event_name != 'pull_request_target'))
+      &&
+      !contains(github.event.pull_request.labels.*.name, 'requires new pip wheels')
+    steps:
+      - name: pre-checkout setup
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -o APT::Acquire::Retries=4 -qq
+          apt-get install -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy --no-install-recommends ca-certificates sudo git
+          # Create non-root user for running repository setup / tests
+          useradd -m -s /bin/bash runner
+          echo 'runner ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+        shell: bash
+
+      - name: checkout PR code
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: |
+            *
+            !.github
+          sparse-checkout-cone-mode: false
+
+      - name: checkout
+        if: github.event_name != 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: checkout solutions
+        env:
+          SOLUTIONS_TOKEN: ${{ secrets.SOLUTIONS_TOKEN }}
+        run: |
+          if [[ -z "${SOLUTIONS_TOKEN}" ]]; then
+            echo "SOLUTIONS_TOKEN not available; skipping solutions checkout"
+            exit 0
+          fi
+          git clone https://x-access-token:${SOLUTIONS_TOKEN}@github.com/RobotLocomotion/manipulation-solutions.git solutions
+          cd solutions && git checkout $(cat ../solutions_sha.txt) && cd ..
+        shell: bash
+
+      - name: install dependencies
+        run: |
+          # Fix ownership of the workspace
+          chown -R runner:runner .
+          # Switch to runner user for remaining commands
+          sudo -H -u runner ./setup/submodule_checkout
+          # Install system packages as root
+          ./setup/ubuntu/24.04/install_prereqs.sh
+          rm -rf ./manipulation  # remove local module, force pip module.
+          # CPU wheels are a CI-only choice; leave published requirements unchanged.
+          sudo -H -u runner python3 -m pip install --user --break-system-packages \
+            --index-url https://download.pytorch.org/whl/cpu 'torch>=2.3,<3.0' 'torchvision>=0.18,<1.0'
+          # Keep the subsequent resolver from replacing these with GPU builds.
+          sudo -H -u runner python3 -c 'from importlib.metadata import version; print("\n".join(f"{p}=={version(p)}" for p in ("torch", "torchvision")))' > /tmp/ci-torch-constraints.txt
+          sudo -H -u runner python3 -m pip install --user --break-system-packages \
+            --constraint /tmp/ci-torch-constraints.txt --upgrade manipulation[all] pytest pytest-timeout 'pytest-xdist>=3.6,<4'
+          sudo -H -u runner python3 -c 'import torch, torchvision; print(torch.__version__, torchvision.__version__); assert "+cpu" in torch.__version__ and "+cpu" in torchvision.__version__; assert torch.version.cuda is None'
+          rm -rf /var/cache/apt/archives/*.deb /var/cache/apt/archives/partial/*.deb /var/cache/apt/*.bin /var/lib/apt/lists/* /var/log/apt/*
+        shell: bash
+
+      - name: prefetch remote packages
+        run: |
+          sudo -H -u runner env XDG_CACHE_HOME=/tmp \
+            python3 -m setup.prefetch_remotes
+        shell: bash
+
+      - name: test
+        run: |
+          set -euo pipefail
+          find book/htmlbook -type f -name 'test_*.py' -delete  # remove htmlbook tests (extra Python requirements)
+          sudo --preserve-env=OMP_NUM_THREADS,OPENBLAS_NUM_THREADS,MKL_NUM_THREADS,NUMEXPR_NUM_THREADS \
+            -H -u runner env -u DISPLAY MANIPULATION_DATA_DIR="$(pwd)/book/data" \
+            XDG_CACHE_HOME=/tmp DRAKE_ALLOW_NETWORK=lcm:meshcat \
+            python3 -m pytest -n 2 --dist loadfile -ra --durations=30 --junitxml=test-results/pytest.xml
+        shell: bash
+
+      - name: upload test timings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-${{ github.job }}
+          path: test-results/pytest.xml
+          if-no-files-found: ignore
+          retention-days: 14
+
+  sequoia:
+    name: macos sequoia 15
+    runs-on: macos-15
+    needs: [check-approval]
+    if: >
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+      ||
+      (github.event_name == 'pull_request_target' &&
+       github.event.pull_request.head.repo.full_name != github.repository &&
+       needs.check-approval.outputs.should-run == 'true')
+      ||
+      (github.event_name != 'pull_request' &&
+       github.event_name != 'pull_request_target')
+    steps:
+      - name: checkout PR code
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: |
+            *
+            !.github
+          sparse-checkout-cone-mode: false
+
+      - name: checkout
+        if: github.event_name != 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: checkout solutions
+        env:
+          SOLUTIONS_TOKEN: ${{ secrets.SOLUTIONS_TOKEN }}
+        run: |
+          if [[ -z "${SOLUTIONS_TOKEN}" ]]; then
+            echo "SOLUTIONS_TOKEN not available; skipping solutions checkout"
+            exit 0
+          fi
+          git clone https://x-access-token:${SOLUTIONS_TOKEN}@github.com/RobotLocomotion/manipulation-solutions.git solutions
+          cd solutions && git checkout $(cat ../solutions_sha.txt) && cd ..
+        shell: zsh -efuo pipefail {0}
+
+      - name: setup
+        run: |
+          ./setup/submodule_checkout
+          ./setup/mac/install_prereqs.sh
+          python -m pip install --user poetry==2.1.4
+          python -m poetry config virtualenvs.in-project true
+          python -m poetry env use "$(python -c 'import sys; print(sys.executable)')"
+          python -m poetry install --all-extras --with dev
+          # Enable lcm multicast; see drake #22322 for details.
+          sudo route -nv delete 224.0.0.0/4
+          sudo route -nv add -net 224.0.0.0/4 -interface lo0          
+        shell: zsh -efuo pipefail {0}
+
+      - name: prefetch remote packages
+        run: XDG_CACHE_HOME=/tmp .venv/bin/python -m setup.prefetch_remotes
+        shell: zsh -efuo pipefail {0}
+
+      - name: test
+        run: |
+          set -euo pipefail
+          XDG_CACHE_HOME=/tmp DRAKE_ALLOW_NETWORK=lcm:meshcat .venv/bin/python -m pytest -n 2 --dist loadfile -ra --durations=30 --junitxml=test-results/pytest.xml
+        shell: zsh -efuo pipefail {0}
+
+      - name: upload test timings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-${{ github.job }}
+          path: test-results/pytest.xml
+          if-no-files-found: ignore
+          retention-days: 14
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: [check-approval]
+    if: >
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+      ||
+      (github.event_name == 'pull_request_target' &&
+       github.event.pull_request.head.repo.full_name != github.repository &&
+       needs.check-approval.outputs.should-run == 'true')
+      ||
+      (github.event_name != 'pull_request' &&
+       github.event_name != 'pull_request_target')
+    steps:
+      - name: checkout PR code
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: |
+            *
+            !.github
+          sparse-checkout-cone-mode: false
+
+      - name: checkout repo
+        if: github.event_name != 'pull_request_target'
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: black
+        uses: psf/black@stable
+        with:
+          version: 26.5.1
+          jupyter: true
+
+      - name: isort
+        uses: isort/isort-action@master
+        with:
+          configuration: "--profile black --check-only"
+          isort-version: 5.12.0
+
+      - name: autoflake
+        run: |
+          python -m pip install autoflake==2.0.2
+          autoflake . --remove-all-unused-imports --in-place
+
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 2.1.4
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: build the docs
+        run: |
+          poetry install --only docs
+          source .venv/bin/activate
+          sphinx-build -M html manipulation book/python
+        shell: bash
+
+      - name: Test full poetry install
+        run: poetry install

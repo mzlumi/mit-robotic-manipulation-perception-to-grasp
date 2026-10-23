@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <title>Ch. 10 - Deep Perception for
+Manipulation</title>
+    <meta name="Ch. 10 - Deep Perception for
+Manipulation" content="text/html; charset=utf-8;" />
+    <link rel="canonical" href="http://manipulation.csail.mit.edu/deep_perception.html" />
+
+    <script type="text/plain" data-run-after="mathjax" src="https://hypothes.is/embed.js"></script>
+    <script type="text/javascript" src="htmlbook/book.js"></script>
+    <script type="text/javascript" src="notebooks.js"></script>
+
+    <script src="htmlbook/mathjax-config.js" defer></script> 
+    <script src="htmlbook/mathjax-loader.js" defer></script>
+
+    <link rel="stylesheet" href="htmlbook/highlight/styles/default.css">
+    <script src="htmlbook/highlight/highlight.pack.js"></script> <!-- http://highlightjs.readthedocs.io/en/latest/css-classes-reference.html#language-names-and-aliases -->
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <link rel="stylesheet" type="text/css" href="htmlbook/book.css" />
+  </head>
+
+<body onload="loadChapter('manipulation');">
+
+<div data-type="titlepage" pdf="no">
+  <header>
+    <h1><a href="index.html" style="text-decoration:none;">Robotic Manipulation</a></h1>
+    <p data-type="subtitle">Perception, Planning, and Control</p> 
+    <p style="font-size: 18px;"><a href="http://people.csail.mit.edu/russt/">Russ Tedrake</a></p>
+    <p style="font-size: 14px; text-align: right;"> 
+      &copy; Russ Tedrake, 2020-2026<br/>
+      Last modified <span id="last_modified"></span>.</br>
+      <script>
+      var d = new Date(document.lastModified);
+      document.getElementById("last_modified").innerHTML = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();</script>
+      <a href="misc.html">How to cite these notes, use annotations, and give feedback.</a><br/>
+    </p>
+  </header>
+</div>
+
+<p pdf="no"><b>Note:</b> These are working notes used for <a
+href="http://manipulation.csail.mit.edu/Fall2026/">a course being taught
+at MIT</a>. They will be updated throughout the Fall 2026 semester.  <!-- <a
+href="https://www.youtube.com/channel/UChfUOAhz7ynELF-s_1LPpWg">Lecture videos are available on YouTube</a>.--></p> 
+
+<table style="width:100%;" pdf="no"><tr style="width:100%">
+  <td style="width:33%;text-align:left;"><a class="previous_chapter" href=segmentation.html>Previous Chapter</a></td>
+  <td style="width:33%;text-align:center;"><a href=index.html>Table of contents</a></td>
+  <td style="width:33%;text-align:right;"><a class="next_chapter" href=rl.html>Next Chapter</a></td>
+</tr></table>
+
+<!-- EVERYTHING ABOVE THIS LINE IS OVERWRITTEN BY THE INSTALL SCRIPT -->
+<chapter style="counter-reset: chapter 9"><h1>Deep Perception for
+Manipulation</h1>
+
+  <p>In the previous chapter, we discussed deep-learning approaches to object
+  detection and (instance-level) segmentation; these are general-purpose tasks
+  for processing RGB images that are used broadly in computer vision. Detection
+  and segmentation alone can be combined with geometric perception to, for
+  instance, estimate the pose of a known object in just the segmented point
+  cloud instead of the entire scene, or to run our point-cloud grasp selection
+  algorithm only on the segmented point cloud in order to pick up an object of
+  interest.</p>
+
+  <p>One of the most amazing features of deep learning for perception is that
+  we can pre-train on a different dataset (like ImageNet or COCO) or even a
+  different task and then fine-tune on our domain-specific dataset or task. But
+  what are the right perception tasks for manipulation?  Object detection and
+  segmentation are a great start, but often we want to know more about the
+  scene/objects to manipulate them. That is the topic of this chapter.</p>
+
+  <p>There is a potential answer to this question that we will defer to a later
+  chapter: learning end-to-end "visuomotor" policies, sometimes affectionately
+  referred to as "pixels to torques". Here I want us to think first about how
+  we can combine a deep-learning-based perception system with the powerful
+  existing (model-based) tools that we have been building up for planning and
+  control.</p>
+
+  <todo> maybe a system diagram which includes perception, planning and
+  control? So far we’ve had two version - grasp candidates and/or object pose…
+  </todo>
+
+  <p>I'll start with the deep-learning version of a perception task we've
+  already considered: object pose estimation.</p>
+
+  <!-- representations of uncertainty should be a theme i'll carry throughout.
+  make analogy to object detection outputs (e.g. in mask-rcnn) -->
+
+  <section><h1>Pose estimation</h1>
+
+    <!-- some notes in 2021 lecture 11 ithoughts. -->
+
+    <p>We discussed pose estimation at some length in the <a
+    href="pose.html">geometric perception chapter</a>, and had a few take-away
+    messages. Most importantly, the geometric approaches have only a very
+    limited ability to make use of RGB values; but these are incredibly
+    valuable for resolving a pose. Geometry alone doesn't tell the full story.
+    Another subtle lesson was that the ICP loss, although conceptually very
+    clean, does not sufficiently capture the richer concepts like
+    non-penetration and free-space constraints. As the original core problems
+    in 2D computer vision started to feel "solved", we've seen a surge of
+    interest/activity from the computer vision community on 3D perception,
+    which is great for robotics!</p>
+
+    <p>The conceptually simplest version of this problem is that we would like
+    to estimate the pose of a known object from a single RGB image. How should
+    we train a mustard-bottle-specific (for example) deep network which takes
+    an RGB image in, and outputs a pose estimate? Of course, if we can do this,
+    we can also apply the idea to e.g. the images cropped from the bounding
+    box output of an object recognition / instance segmentation system.</p> 
+
+    <subsection><h1>Pose representation</h1>
+    
+      <p>Once again, we must confront the question of how best to represent a
+      pose. Many initial architectures discretized the pose space into bins and
+      formulated pose estimation as a classification problem, but the trend
+      eventually shifted towards pose
+      regression<elib>Mahendran17+Xiang17</elib>. Regressing three numbers to
+      represent x-y-z translation seems clear, but we have many choices for how
+      to represent 3D orientation (e.g. Euler angles, unit quaternions,
+      rotation matrices, ...), and our choice can impact learning and
+      generalization performance.</p>
+
+      <p>To output a single pose, works like <elib>Zhou19</elib> and
+      <elib>Levinson20</elib> argue that many rotation parameterizations have
+      issues with discontinuities. They recommend having the network output 6
+      numbers for the rotation (and then projecting to SO(3) via Gram-Schmidt
+      orthogonalization), or outputting the full 9 numbers of the rotation
+      matrix, and projecting back to SO(3) via <a
+      href="pose.html#registration">SVD orthogonalization</a>.</p>
+    
+      <p>Perhaps more substantially, many works have pointed out that
+      outputting a single "correct" pose is simply not sufficient
+      <elib>Hashimoto20+Deng22</elib>. When objects have rotational symmetries,
+      or if they are severely occluded, then outputting an entire pose
+      distribution is much more adequate. Representing a categorial
+      distribution is very natural for discretized representations, but how do
+      we represent distributions over continuous pose? One very elegant choice
+      is the Bingham distribution, which gives the natural generalization of
+      Gaussians applied to unit quaternions
+      <elib>Glover14+Peretroukhin20+Deng22</elib>. </p>
+
+    </subsection>
+
+    <subsection><h1>Loss functions</h1>
+
+      <p>No matter which pose representation is coming out of the network and
+      the ground truth labels, one must choose the appropriate loss function.
+      Quaternion-based loss functions can be used to compute the geodesic
+      distance between two orientations, and should certainly be more
+      appropriate than e.g. a least-squares metric on Euler angles. More
+      expensive, but potentially more suitable is to write the loss function in
+      terms of a reconstruction error so that the network is not artificially
+      penalized for e.g. symmetries which it could not possibly address
+      <elib>Hodan20</elib>.</p>
+
+      <p>Training a network to output an entire distribution over pose brings
+      up additional interesting questions about the choice for the loss
+      function. While it is possible to train the distribution based on only
+      the statistics of the data labeled with ground truth pose (again,
+      choosing maximum likelihood loss vs mean-squared error), it is also
+      possible to use our understanding of the symmetries to provide more
+      direct supervision. For example, <elib>Hashimoto20</elib> used image
+      differences to efficiently (but heuristically) estimate a ground-truth
+      covariance for each sample.</p>
+    
+    </subsection>
+
+    <subsection><h1>Pose estimation benchmarks</h1>
+
+      <p>Benchmark for 6D Object Pose Estimation (BOP)<elib>Hodan20</elib>.  </p>
+
+      <!-- maybe: Common Objects in 3D:
+Large-Scale Learning and Evaluation of Real-life 3D Category Reconstruction -->
+
+    </subsection>
+
+    <!-- maybe: 
+
+      Something about architecture?  (e.g. 3D convolutions, etc) Do I even want
+      to go there?
+
+      More discussion/refs from Kuni, Duy, and Ben:
+      https://tri-internal.slack.com/archives/C02J6UV6874/p1634596625000100
+
+      Angjoo's course: https://sites.google.com/berkeley.edu/cs294-173/
+
+      https://openaccess.thecvf.com/content_ECCV_2018/papers/Martin_Sundermeyer_Implicit_3D_Orientation_ECCV_2018_paper.pdf
+
+      DeepIM https://arxiv.org/abs/1804.00175
+
+    -->
+
+    <subsection><h1>Limitations</h1>
+    
+      <p>Although pose estimation is a natural task, and it is straightforward
+      to plug an estimated pose into many of our robotics pipelines, I feel
+      pretty strongly that this is often not the right choice for connecting
+      perception to planning and control. Although some attempts have been made
+      to generalize pose to categories of objects <elib>Wang19</elib>, pose
+      estimation is pretty strongly tied to known objects, which feels
+      limiting. Accurately estimating the pose of an object is difficult, and
+      is often not necessary for manipulation.</p>
+
+    </subsection>
+
+  </section>
+
+  <section><h1>Grasp selection</h1>
+
+    <p>In <elib>Gibson77+Gibson79</elib>, J.J. Gibson articulated his highly
+    influential <i>theory of affordances</i>, where he described the role of
+    perception as serving behavior (and behavior being controlled by
+    perception). In our case, affordances describe not what the
+    object/environment is nor its pose, but what opportunities for action it
+    provides to the robot. Importantly, one can potentially estimate
+    affordances without explicitly estimating pose.</p>
+
+    <p>Two of the earliest and most successful examples of this were
+    <elib>tenPas17+tenPas18</elib> and <elib>Mahler17+Mahler17a</elib>, which
+    attempted to learn a grasping affordances directly from raw RGB-D input.
+    <elib>tenPas17</elib> used a grasp selection strategy that was very similar
+    to (and partly the inspiration for) the <a
+    href="clutter.html#grasp_sampler">grasp sampler</a> we introduced in our
+    antipodal grasping workflow. But in addition to the geometric heuristic,
+    <elib>tenPas17</elib> trained a small CNN to predict grasp success.  The
+    input to this CNN was a voxelized summary of the pixels and local geometry
+    estimates in the immediate vicinity of the grasp, and the output was a
+    binary prediction of grasp success or failure. Similarly,
+    <elib>Mahler17</elib> learned a "grasp quality" CNN takes as input the
+    depth image in the grasp frame (+ the grasp depth in the camera frame) and
+    outputs a probability of grasp success.</p>
+
+    <p>Transporter nets <elib>Zeng21</elib></p>
+
+  </section>  
+
+  <section><h1>(Semantic) Keypoints</h1>
+  
+    <!-- something in-between: can reuse the representation for multiple tasks... -->
+
+    <p>KeyPoint Affordances for Category-Level Robotic Manipulation (kPAM) <elib>Manuelli19+Gao20b</elib>.</p>
+
+    <!-- category level -->
+
+    <!-- wei's keypoint labeling tool -->
+
+    <todo>Example: corner keypoints for boxes.  (also pose+shape estimation
+    from keypoints?)</todo>
+  </section>
+
+  <section><h1>Dense Correspondences</h1>
+
+    <p><elib>Florence18a</elib>, DynoV2, ...</p>
+
+    <!-- dense correspondence -->
+    <!-- anthony's neural descriptor fields -->
+
+  </section>
+
+  <section><h1>Scene Flow</h1>
+  
+    <todo>https://proceedings.mlr.press/v205/seita23a/seita23a.pdf and other work by Held should get me started.</todo>
+    <!-- my favorite paper of David's is FlowBot3D -->
+
+  </section>
+
+
+
+  <section><h1>Task-level state</h1>
+
+    <!-- tcc.  chris paxton "red block is on the blue block".  VLM/VQA.  GPT-4V! -->
+  
+  </section>
+
+  <!-- Can I do a putting it all together section here?? Or in each section? -->
+
+  <section><h1>Other perceptual tasks / representations</h1>
+  
+    <p>My coverage above is necessarily incomplete and the field is moving
+    fast. Here is a quick "shout out" to a few other very relevant ideas.</p>
+
+    <p>More coming soon...</p>
+    <!-- shape estimation / completion -->
+    <!-- transporter nets -->
+    <!-- estimating dynamic parameters (mass / friction / etc) -->
+
+    <!-- danny's compositional nerf? -->
+    <!-- probably defer learning dynamics models to another chapter -->
+    <!-- M0m from lpk -->
+    <!-- Particles? or deformables more generally… -->
+
+    <!-- kick out a complete urdf (+ poses?). so mass, etc. -->
+    
+  </section>
+
+  <!-- maybe add a “looking forward” section?  Cracking an egg, etc.  what
+  should the perception system output?  How do we write the planning/control
+  system.  This is where full-stack deep learning approaches are winning.  But
+  i don’t know that being data-driven (or deep) is fundamental here.
+
+  Maybe future chapter on state representations?  In the model-learning
+  section? -->
+
+  <section id="exercises"><h1>Exercises</h1>
+    <exercise id="don_contrastive"><h1>Deep Object Net and Contrastive Loss</h1>
+      <p>In this problem you will further explore Dense Object Nets, which were introduced in lecture. Dense Object Nets are able to quickly learn consistent pixel-level representations for visual understanding and manipulation. Dense Object Nets are powerful because the representations they predict are applicable to both rigid and non-rigid objects. They can also generalize to new objects in the same class and can be trained with self-supervised learning. For this problem you will work in <script>document.write(notebook_link('deep_perception', notebook='exercises/contrastive', link_text='this notebook'))</script> to first implement the loss function used to train Dense Object Nets, and then predict correspondences between images using a trained Dense Object Net.</p>
+    </exercise>
+  </section>
+
+</chapter>
+<!-- EVERYTHING BELOW THIS LINE IS OVERWRITTEN BY THE INSTALL SCRIPT -->
+
+<div id="references"><section><h1>References</h1>
+<ol>
+
+<li id=Mahendran17>
+<span class="author">Siddharth Mahendran and Haider Ali and Ren&eacute; Vidal</span>, 
+<span class="title">"3d pose regression using convolutional neural networks"</span>, 
+<span class="publisher">Proceedings of the IEEE International Conference on Computer Vision Workshops</span> , pp. 2174--2182, <span class="year">2017</span>.
+
+</li><br>
+<li id=Xiang17>
+<span class="author">Yu Xiang and Tanner Schmidt and Venkatraman Narayanan and Dieter Fox</span>, 
+<span class="title">"Posecnn: A convolutional neural network for 6d object pose estimation in cluttered scenes"</span>, 
+<span class="publisher">arXiv preprint arXiv:1711.00199</span>, <span class="year">2017</span>.
+
+</li><br>
+<li id=Zhou19>
+<span class="author">Yi Zhou and Connelly Barnes and Jingwan Lu and Jimei Yang and Hao Li</span>, 
+<span class="title">"On the continuity of rotation representations in neural networks"</span>, 
+<span class="publisher">Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition</span> , pp. 5745--5753, <span class="year">2019</span>.
+
+</li><br>
+<li id=Levinson20>
+<span class="author">Jake Levinson and Carlos Esteves and Kefan Chen and Noah Snavely and Angjoo Kanazawa and Afshin Rostamizadeh and Ameesh Makadia</span>, 
+<span class="title">"An analysis of svd for deep rotation estimation"</span>, 
+<span class="publisher">Advances in Neural Information Processing Systems</span>, vol. 33, pp. 22554--22565, <span class="year">2020</span>.
+
+</li><br>
+<li id=Hashimoto20>
+<span class="author">Kunimatsu Hashimoto* and Duy-Nguyen Ta* and Eric Cousineau and Russ Tedrake</span>, 
+<span class="title">"KOSNet: A Unified Keypoint, Orientation and Scale Network for Probabilistic 6D Pose Estimation"</span>, 
+<span class="publisher">Under review</span> , <span class="year">2020</span>.
+[&nbsp;<a href="http://groups.csail.mit.edu/robotics-center/public_papers/Hashimoto20.pdf">link</a>&nbsp;]
+
+</li><br>
+<li id=Deng22>
+<span class="author">Haowen Deng and Mai Bui and Nassir Navab and Leonidas Guibas and Slobodan Ilic and Tolga Birdal</span>, 
+<span class="title">"Deep bingham networks: Dealing with uncertainty and ambiguity in pose estimation"</span>, 
+<span class="publisher">International Journal of Computer Vision</span>, vol. 130, no. 7, pp. 1627--1654, <span class="year">2022</span>.
+
+</li><br>
+<li id=Glover14>
+<span class="author">Jared Marshall Glover</span>, 
+<span class="title">"The Quaternion Bingham Distribution, 3D Object Detection, and Dynamic Manipulation"</span>, 
+PhD thesis, Massachusetts Institute of Technology, May, <span class="year">2014</span>.
+
+</li><br>
+<li id=Peretroukhin20>
+<span class="author">Valentin Peretroukhin and Matthew Giamou and David M Rosen and W Nicholas Greene and Nicholas Roy and Jonathan Kelly</span>, 
+<span class="title">"A smooth representation of belief over so (3) for deep rotation learning with uncertainty"</span>, 
+<span class="publisher">arXiv preprint arXiv:2006.01031</span>, <span class="year">2020</span>.
+
+</li><br>
+<li id=Hodan20>
+<span class="author">Tom&aacute;s Hodan and Martin Sundermeyer and Bertram Drost and Yann Labb&eacute; and Eric Brachmann and Frank Michel and Carsten Rother and Jir&iacute; Matas</span>, 
+<span class="title">"BOP Challenge 2020 on 6D Object Localization"</span>, 
+<span class="publisher">European Conference on Computer Vision Workshops (ECCVW)</span>, <span class="year">2020</span>.
+
+</li><br>
+<li id=Wang19>
+<span class="author">He Wang and Srinath Sridhar and Jingwei Huang and Julien Valentin and Shuran Song and Leonidas J Guibas</span>, 
+<span class="title">"Normalized object coordinate space for category-level 6d object pose and size estimation"</span>, 
+<span class="publisher">Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition</span> , pp. 2642--2651, <span class="year">2019</span>.
+
+</li><br>
+<li id=Gibson77>
+<span class="author">James J Gibson</span>, 
+<span class="title">"The theory of affordances"</span>, 
+<span class="publisher">Hilldale, USA</span>, vol. 1, no. 2, pp. 67--82, <span class="year">1977</span>.
+
+</li><br>
+<li id=Gibson79>
+<span class="author">James J Gibson</span>, 
+<span class="title">"The ecological approach to visual perception"</span>, Psychology press
+, <span class="year">1979</span>.
+
+</li><br>
+<li id=tenPas17>
+<span class="author">Andreas ten Pas and Marcus Gualtieri and Kate Saenko and Robert Platt</span>, 
+<span class="title">"Grasp pose detection in point clouds"</span>, 
+<span class="publisher">The International Journal of Robotics Research</span>, vol. 36, no. 13-14, pp. 1455--1473, <span class="year">2017</span>.
+
+</li><br>
+<li id=tenPas18>
+<span class="author">Andreas Ten Pas and Robert Platt</span>, 
+<span class="title">"Using geometry to detect grasp poses in 3d point clouds"</span>, 
+<span class="publisher">Robotics Research: Volume 1</span>, pp. 307--324, <span class="year">2018</span>.
+
+</li><br>
+<li id=Mahler17>
+<span class="author">Jeffrey Mahler and Jacky Liang and Sherdil Niyaz and Michael Laskey and Richard Doan and Xinyu Liu and Juan Aparicio Ojea and Ken Goldberg</span>, 
+<span class="title">"Dex-net 2.0: Deep learning to plan robust grasps with synthetic point clouds and analytic grasp metrics"</span>, 
+<span class="publisher">arXiv preprint arXiv:1703.09312</span>, <span class="year">2017</span>.
+
+</li><br>
+<li id=Mahler17a>
+<span class="author">Jeffrey Mahler and Ken Goldberg</span>, 
+<span class="title">"Learning deep policies for robot bin picking by simulating robust grasping sequences"</span>, 
+<span class="publisher">Conference on robot learning</span> , pp. 515--524, <span class="year">2017</span>.
+
+</li><br>
+<li id=Zeng21>
+<span class="author">Andy Zeng and Pete Florence and Jonathan Tompson and Stefan Welker and Jonathan Chien and Maria Attarian and Travis Armstrong and Ivan Krasin and Dan Duong and Vikas Sindhwani and others</span>, 
+<span class="title">"Transporter networks: Rearranging the visual world for robotic manipulation"</span>, 
+<span class="publisher">Conference on Robot Learning</span> , pp. 726--747, <span class="year">2021</span>.
+
+</li><br>
+<li id=Manuelli19>
+<span class="author">Lucas Manuelli* and Wei Gao* and Peter Florence and Russ Tedrake</span>, 
+<span class="title">"kPAM: KeyPoint Affordances for Category-Level Robotic Manipulation"</span>, 
+<span class="publisher">arXiv e-prints</span>, pp. arXiv:1903.06684, Mar, <span class="year">2019</span>.
+[&nbsp;<a href="https://sites.google.com/view/kpam">link</a>&nbsp;]
+
+</li><br>
+<li id=Gao20b>
+<span class="author">Wei Gao and Russ Tedrake</span>, 
+<span class="title">"kPAM 2.0: Feedback control for generalizable manipulation"</span>, 
+<span class="publisher">IEEE Robotics and Automation Letters</span>, <span class="year">2020</span>.
+[&nbsp;<a href="http://groups.csail.mit.edu/robotics-center/public_papers/Gao20b.pdf">link</a>&nbsp;]
+
+</li><br>
+<li id=Florence18a>
+<span class="author">Peter R. Florence* and Lucas Manuelli* and Russ Tedrake</span>, 
+<span class="title">"Dense Object Nets: Learning Dense Visual Object Descriptors By and For Robotic Manipulation"</span>, 
+<span class="publisher">Conference on Robot Learning (CoRL)</span> , October, <span class="year">2018</span>.
+[&nbsp;<a href="http://groups.csail.mit.edu/robotics-center/public_papers/Florence18a.pdf">link</a>&nbsp;]
+
+</li><br>
+</ol>
+</section><p/>
+</div>
+
+<table style="width:100%;" pdf="no"><tr style="width:100%">
+  <td style="width:33%;text-align:left;"><a class="previous_chapter" href=segmentation.html>Previous Chapter</a></td>
+  <td style="width:33%;text-align:center;"><a href=index.html>Table of contents</a></td>
+  <td style="width:33%;text-align:right;"><a class="next_chapter" href=rl.html>Next Chapter</a></td>
+</tr></table>
+
+<div id="footer" pdf="no">
+  <hr>
+  <table style="width:100%;">
+    <tr><td><a href="https://accessibility.mit.edu/">Accessibility</a></td><td style="text-align:right">&copy; Russ
+      Tedrake, 2026</td></tr>
+  </table>
+</div>
+
+
+</body>
+</html>

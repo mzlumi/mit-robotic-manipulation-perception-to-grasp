@@ -1,0 +1,48 @@
+{
+  "elib_url": "https://manipulation.csail.mit.edu/htmlbook/elib.cgi",
+  "annotation_notifier_health_url": "https://underactuated-r1.csail.mit.edu/hypothesis-health.json",
+  "chapter_ids" : [
+    "intro",
+    "robot",
+    "pick",
+    "pose",
+    "clutter",
+    "trajectories",
+    "mobile",
+    "force",
+    "segmentation",
+    "deep_perception",
+    "rl",
+    "tactile",
+    "spatial",
+    "drake",
+    "environments",
+    "station",
+    "misc"
+  ],
+  "draft_chapter_ids": [
+    "tamp", 
+    "visuomotor",
+    "foundation_models"
+  ],
+  "other_potential_chapters": [ 
+    "imitation learning / behavior cloning",
+    "(learned) visual representations (autoencoders, dense descriptors, tcc, etc)",
+    "underactuated (maybe dexterous?)",
+    "belief-space planning (draft in underactuated)",
+    "tactile (estimation, tracking, slip detection, etc)?",
+    "tracking (or this could go with geometric perception)",
+    "dense reconstruction (more merge with real2sim?).  NeRF, kinect fusion, elastic fusion, surfelwarp. ",
+    "mobile (octrees, estimation, navigation, etc)",
+    "teleop (keyboard + mouse, HTC Vive, data gloves, haptic feedback)",
+    "system id / intuitive physics / real 2 sim",
+    "verification and/or distributions over the world (scene grammars)"
+  ],
+  "parts_format": "dict(first chapter id, name of the part)",
+  "parts" : {
+    "spatial": "Appendix"
+  },
+  "other_potential_parts" : [
+    "Special topics"
+  ]
+}
