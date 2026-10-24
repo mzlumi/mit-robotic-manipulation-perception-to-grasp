@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MIT 6.4210/6.4212 - Robotic Manipulation</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Theme CSS -->
+    <link href="css/clean-blog.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+      <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header page-scroll">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  Menu <i class="fa fa-bars"></i>
+              </button>
+              <a class="navbar-brand" href="index.html" style="text-decoration:none;">MIT 6.4210/6.4212 - Robotic Manipulation</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li>
+                      <a href="index.html#description" style="text-decoration:none;">Description</a>
+                  </li>
+                  <li>
+                      <a href="index.html#information" style="text-decoration:none;">Information</a>
+                  </li>
+                  <li>
+                      <a href="schedule.html" style="text-decoration:none;">Schedule</a>
+                  </li>
+                  <li>
+                      <a href="project.html" style="text-decoration:none;">Project</a>
+                  </li>
+                  <li>
+                      <a href="index.html#faq" style="text-decoration:none;">FAQ</a>
+                  </li>
+                  <li>
+                      <a href="index.html#people" style="text-decoration:none;">People</a>
+                  </li>
+              </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container -->
+</nav>
+
+
+<style>
+div.top {
+    width: 90%;
+}
+</style>
+
+<div class="container" style="margin-top:50px;">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <h2 align="center" class="section-heading" id="description">Schedule: Fall 2023</h2>
+    <p>
+    Lectures are Tuesday and Thursday 2:30-4:00 (in MIT E25-111).</p>
+    <p>
+    Recitations are only for the undergrad version, 6.4210 (R1: Friday at 1pm in 4-159, R2: Friday at 2pm in 4-159, or R3: Friday at 1pm in 4-153).
+    </p><p></p>
+    Here is a tentative schedule of lectures, readings, assignments, and final
+    project. Additional readings and assignments will be added as they become
+    available.
+    </p>
+    <p>You can find all of the lectures for this term on the course <a href="https://www.youtube.com/playlist?list=PLkx8KyIQkMfWr191lqbN8WfV08j-ui8WX">YouTube playlist</a>.</p>
+
+</div>
+</div>
+
+<style>
+  table.calendar {
+      font-family: arial, helvetica;
+      /*font-size: 14pt;*/
+      empty-cells: show;
+      border: 1px solid #000000;
+      border-collapse: collapse;
+  }
+  table.calendar tr td {
+      border: 1px solid #aaaaaa;
+  }
+  table.calendar tr {
+      vertical-align: top;
+      height: 6em;
+      background: #e7e6e5;
+  }
+  table.calendar thead tr {
+      text-align: center;
+      background: #8A8B8C;
+      color: #ffffff;
+      height: auto;
+      font-weight: bold;
+  }
+  .lecture {
+      background: #b8737f;
+      color: #ffffff;
+  }
+  .recitation {
+      background: #c4c7ca;
+  }
+  .tutorial {
+      background: #c4c7ca;
+  }
+  .quiz {
+      background: #c4c7ca;
+  }
+  .holiday {
+      background: #c4c7ca;
+  }
+  .special {
+      background: #c4c7ca;
+  }
+  .important {
+      background: #c4c7ca;
+  }
+  .institute {}
+  .reading {
+      color: #000000;
+      font-size:small;
+  }
+  .deadline {
+    color: #A31F34;
+  }
+  .assignment {
+      color: #A31F34;
+  }
+  .ci_assignment {
+      color: #A31F34;
+  }
+  .date {
+      color: #000000;
+  }
+  .due {
+      background: #A31F34;
+      color: #ffffff;
+  }
+
+  .details {
+    display: none;
+    position: absolute;
+    transform-origin: center;
+    transform: translateX(-100%) translateY(10px);
+    background-color: #ffffff;
+  }
+  .for_details:hover + .details {
+    display: block;
+  }
+</style>
+
+<p>
+
+  <div class="container">
+    <div id="calendar"></div>
+  </div>
+
+</p>
+
+
+<div class="container">
+  <div id="lecture_list"></div>
+
+  <div id="pset_list"></div>
+
+  <div id="recitation_list"></div>
+
+  <div id="ci_assignment_list"></div>
+
+  <div id="grad_assignment_list"></div>
+
+</div>
+
+<script type="text/javascript">
+  var lectures = [];
+  lectures.push({
+    title: 'Anatomy of a manipulation system',
+    reading: '<a href="https://manipulation.csail.mit.edu/intro.html">Ch. 1</a> and <a href="https://medium.com/toyotaresearch/drake-model-based-design-in-the-age-of-robotics-and-machine-learning-59938c985515">Drake Blog Post</a>',
+//    video: ''
+  });
+  lectures.push({
+    title: "Let's get you a robot",
+    reading: '<a href="https://manipulation.csail.mit.edu/robot.html">Ch. 2</a>',
+  });
+  lectures.push({
+    title: "Basic pick and place: kinematics and trajectories",
+    reading: '<a href="https://manipulation.csail.mit.edu/pick.html">Ch. 3.0 - 3.4</a>',
+  });
+  lectures.push({
+    title: "Basic pick and place: Differential kinematics",
+    reading: '<a href="https://manipulation.csail.mit.edu/pick.html">Ch. 3.0 - 3.4</a>',
+  });
+  lectures.push({
+    title: "Basic pick and place: Differential kinematics via optimization",
+    reading: '<a href="https://manipulation.csail.mit.edu/pick.html">Ch. 3.5 - 3.9</a>',
+  });
+  lectures.push({
+    title: "Geometric perception: Cameras, point clouds, and registration",
+    reading: '<a href="https://manipulation.csail.mit.edu/pose.html">Ch. 4.0 - 4.4</a>',
+  });
+  lectures.push({
+    title: "Geometric perception: Partial views and outliers",
+    reading: '<a href="https://manipulation.csail.mit.edu/pose.html">Ch. 4.5 -</a>',
+  });
+  lectures.push({
+    title: "Simulation basics and generating cluttered scenes",
+    reading: '<a href="https://manipulation.csail.mit.edu/clutter.html">Ch. 5</a>',
+  });
+  lectures.push({
+    title: "Bin picking: Antipodal grasping",
+    reading: '<a href="https://manipulation.csail.mit.edu/clutter.html">Ch. 5</a>',
+  });
+  lectures.push({
+    title: "Programming behaviors: Scripts, state machines, and behavior trees",
+  });
+  lectures.push({
+    title: "Motion planning: Optimization-based",
+    reading: '<a href="https://manipulation.csail.mit.edu/trajectories.html">Ch. 6.1 - 6.2</a>',
+  });
+  lectures.push({
+    title: "Motion planning: Sampling-based and global optimization",
+    reading: '<a href="https://manipulation.csail.mit.edu/trajectories.html">Ch. 6.3 -</a>',
+  });
+  lectures.push({
+    title: "Mobile Manipulation",
+    reading: '<a href="https://manipulation.csail.mit.edu/mobile.html">Ch. 7</a>',
+  })
+  lectures.push({
+    title: "Force Control",
+    reading: '<a href="https://manipulation.csail.mit.edu/force.html">Ch. 8.0-8.2</a>',
+  });
+  lectures.push({
+    title: "Manipulator Control",
+    reading: '<a href="https://manipulation.csail.mit.edu/force.html">Ch. 8.3 - </a>',
+  });
+  lectures.push({
+    title: "Deep Perception: Object recognition and segmentation",
+    reading: '<a href="https://manipulation.csail.mit.edu/segmentation.html">Ch. 9</a>',
+  });
+  lectures.push({
+    title: "Deep Perception: Perceptual representations for manipulation",
+    reading: '<a href="https://manipulation.csail.mit.edu/deep_perception.html">Ch. 10</a>',
+  })
+  // Could do self-supervised here.
+
+  lectures.push({
+    title: "Visuomotor policies (via Behavior Cloning)",
+  });
+  lectures.push({
+    title: "Reinforcement learning (part 1): policy search",
+  });
+  lectures.push({
+    title: "Reinforcement learning (part 2): policy gradients",
+    reading: '<a href="https://underactuated.mit.edu/rl_policy_search.html">Some notes from underactuated</a>',
+  });
+/*  lectures.push({
+    title: "Parameter Estimation and Adaptive Control",
+  }); */
+/*  
+  lectures.push({
+    title: "Intuitive physics / model-based RL",
+    reading: '<a href="https://underactuated.csail.mit.edu/sysid.html">Underactuated Ch. 18</a>',
+  });
+  lectures.push({
+    title: "Intuitive physics / model-based RL (part II)",
+  });
+*/
+/*  
+  lectures.push({
+    title: "Belief-space planning",
+  }); */
+  lectures.push({
+    title: "Multibody System Identification",
+    reading: '<a href="https://underactuated.csail.mit.edu/sysid.html">Underactuated Ch. 18 (section 2)</a>',
+  });
+  lectures.push({
+    title: "Guest Lecture: Foundation models for decision making",
+  });
+  lectures.push({
+    title: "Tactile sensing and course wrap-up",
+  });
+  lectures.push({
+    title: "Final project videos",
+  });
+
+  var events = {};
+  for (let i=1; i<=12; i++) {
+    events[i] = {};
+  }
+
+  var ci_assignments = [];
+  var grad_assignments = [];
+
+  events[9][4] = [{ type: 'holiday', description: 'Labor Day' }];
+  events[9][5] = [{ type: 'institute', description: 'Reg Day' }];
+  events[9][6] = [{ type: 'institute', description: 'First day of classes' }];
+  events[9][22] = [{ type: 'holiday', description: 'Student holiday - no classes' }];
+  events[10][9] = [{ type: 'holiday', description: 'Indigenous Peoples Day'}];
+  events[10][10] = [{ type: 'holiday', description: 'Student holiday - no classes' }];
+  events[11][7] = [{ type: 'holiday', description: 'Project office hours (no lecture)'}];
+  events[11][28] = [{ type: 'holiday', description: 'Project office hours (no lecture)'}];
+  events[11][10] = [{ type: 'holiday', description: 'Veterans Day'}];
+  events[11][22] = [{ type: 'institute', description: 'Drop Date'}];
+  events[11][23] = [{ type: 'holiday', description: 'Thanksgiving'}];
+  events[11][24] = [{ type: 'holiday', description: 'Institute holiday'}];
+  events[12][13] = [{ type: 'institute', description: 'Last day of classes'}];
+
+  // TODO: Link problems from notes here when they are posted
+  // using e.g. problems = 'pset_1.html'
+  events[9][13] = [{ type: 'assignment', description: 'Simulation', problems: 'pset_1.html'}];
+  events[9][20] = [{ type: 'assignment', description: 'Kinematics I', problems: 'pset_2.html'}];
+  events[9][27] = [{ type: 'assignment', description: 'Kinematics II', problems: 'pset_3.html'}];
+  events[10][4] = [{ type: 'assignment', description: 'Geometry I', problems: 'pset_4.html'}];
+  events[10][11] = [{ type: 'assignment', description: 'Geometry II and Grasping', problems: 'pset_5.html'}];
+  // events[10][18] = [{ type: 'assignment', description: 'Simulation and Behavior'}];//, problems: 'pset_6.html'}];
+  events[10][26] = [{ type: 'assignment', description: 'Simulation and Planning', problems: 'pset_7.html'}];
+  events[11][1] = [{ type: 'assignment', description: 'Control', problems: 'pset_8.html'}];
+  events[11][8] = [{ type: 'assignment', description: 'Deep Perception', problems: 'pset_9.html'}];
+  events[11][20] = [{ type: 'assignment', description: 'Reinforcement Learning', problems: 'pset_10.html'}];
+  events[11][29] = [{ type: 'important', description: 'Project Check-in 2'}]
+  events[12][13] = [{type: 'deadline', description: 'Subject evaluation due', problems: 'subject_eval.html'}]
+  // CI-M content
+  events[9][8] = [{
+    type: 'norecitation',
+    description: 'No recitation', // Or intro to Drake?
+  }];
+  events[9][15] = [{
+    type: 'recitation',
+    description: 'Analyzing a robotics research paper',
+    details: 'recitation_1.html',
+  }];
+  events[9][22] = [{
+    type: 'norecitation',
+    description: 'Student holiday',
+  }];
+  events[9][29] = [{
+    type: 'recitation',
+    description: 'Journal club',
+    details: 'recitation_2_3.html',
+  }];
+  events[10][6] = [{
+    type: 'recitation',
+    description: 'Journal club',
+    details: 'recitation_2_3.html',
+  }];
+  ci_assignments.push({
+    title: 'Journal club presentation',
+    due: 'In recitations 2 or 3',
+    grade: '2 pts',
+  })
+  events[10][13] = [{
+    type: 'recitation',
+    description: 'Intro to proposal writing',
+    details: 'recitation_4.html',
+  }];
+  ci_assignments.push({
+    title: 'Project preproposal',
+    due: 'Oct 20',
+    grade: '2 pts',
+  })
+  grad_assignments.push({
+    title: 'Project preproposal',
+    due: 'Oct 20',
+  })
+  events[10][20] = [{
+    type: 'deadline',
+    description: 'Project preproposal due',
+  }, {
+    type: 'norecitation',
+    description: 'No recitation',
+  }];
+  events[10][27] = [{
+    type: 'recitation',
+    description: 'Peer review + writing conferences',
+    details: 'recitation_5.html',
+  }];
+  ci_assignments.push({
+    title: 'Peer review',
+    due: 'Oct 27',
+    grade: '1 pt',
+  })
+  ci_assignments.push({
+    title: 'Writing conference',
+    due: 'Oct 27',
+    grade: '1 pt',
+  })
+  events[11][3] = [{
+    type: 'deadline',
+    description: 'Project proposal final revision due'
+  }, {
+    type: 'norecitation',
+    description: 'No recitation',
+  }];
+  ci_assignments.push({
+    title: 'Project proposal final revision',
+    due: 'Nov 3',
+    grade: '3 pts'
+  })
+  grad_assignments.push({
+    title: 'Project proposal final revision',
+    due: 'Nov 3',
+  })
+  events[11][10] = [{
+    type: 'norecitation',
+    description: 'No recitation',
+  }];
+  events[11][17] = [{
+    type: 'recitation',
+    description: 'Intro to final report',
+    details: 'recitation_6.html',
+  }];
+  // Thanksgiving
+  events[12][1] = [{
+    type: 'recitation',
+    description: 'Planning video presentation',
+    details: 'recitation_7.html',
+  }];
+  events[12][8] = [{
+    type: 'recitation',
+    description: 'Peer review + writing conferences',
+    details: 'recitation_8.html',
+  }];
+  ci_assignments.push({
+    title: 'Peer review',
+    due: 'Dec 8',
+    grade: '1 pt',
+  })
+  ci_assignments.push({
+    title: 'Writing conference',
+    due: 'Dec 8',
+    grade: '1 pt',
+  })
+  events[12][11] = [{
+    type: 'deadline',
+    description: 'Project final report due',
+  }];
+  ci_assignments.push({
+    title: 'Project final report',
+    due: 'Dec 11',
+    grade: '10 pts',
+  })
+  grad_assignments.push({
+    title: 'Project final report',
+    due: 'Dec 11',
+  })
+  ci_assignments.push({
+    title: 'Project final video',
+    due: 'Dec 12',
+    grade: '3 pts',
+  })
+  grad_assignments.push({
+    title: 'Project final video',
+    due: 'Dec 12',
+  })
+  ci_assignments.push({
+    title: 'CI-M participation',
+    grade: '1 pt',
+  })
+
+
+  var first_day_of_classes = new Date(2023,8,6);  // Sep 6
+  var last_day_of_classes = new Date(2023,11,13); // Dec 13
+
+  var lecture_list = "<h3>Lectures</h3> <ol>\n";
+  for (let i=0; i<lectures.length; i++) {
+    let lec = lectures[i];
+    lecture_list += "<li>" + lec.title + "<ul style='font-size:smaller;'>\n";
+    if ('reading' in lec) {
+      lecture_list += "<li>Reading: " + lec.reading + "</li>\n";
+    }
+    if ('video' in lec) {
+      lecture_list += "<li>Video: " + lec.video + "</li>\n";
+    }
+    lecture_list += "</ul></li>\n";
+  }
+  lecture_list += "</ol>\n";
+  document.getElementById("lecture_list").innerHTML = lecture_list;
+
+  var pset_list = "<h3>Problem Sets</h3> <ol>\n";
+  var d = new Date(2023,8,5);  // Sep 6
+  while (d <= last_day_of_classes) {
+    pset = 0;
+    var e = events[d.getMonth()+1][d.getDate()];
+    if (e) { e.forEach(event => {
+      if (event.type == 'assignment') {
+        if ("problems" in event) {
+            pset_list += "<li><a href=\"" + event.problems + "\">" + event.description + "</a></li>\n";
+        } else {
+            pset_list += "<li>" + event.description + "</li>\n";
+        }
+      }
+    }); }
+    d.setDate(d.getDate() + 1);
+  }
+  pset_list += "</ol>\n";
+  document.getElementById("pset_list").innerHTML = pset_list;
+
+  var ci_assignment_list = "<h3>Project-related (CI) assignments for 6.4210 students</h3> <ol>\n";
+  for (let i=0; i<ci_assignments.length; i++) {
+    let set = ci_assignments[i];
+    ci_assignment_list += "<li>" + set.title + "\n";
+    if ('grade' in set) {
+      ci_assignment_list += "&nbsp;<span style='font-size:smaller;'>(<i>" + set.grade + "</i>)</span>\n";
+    }
+    if ('due' in set) {
+      ci_assignment_list += "&nbsp;<span style='font-size:smaller;'>[Due: " + set.due + "]</span>\n";
+    }
+    ci_assignment_list += "</li>\n";
+  }
+  ci_assignment_list += "</ol>\n";
+  document.getElementById("ci_assignment_list").innerHTML = ci_assignment_list;
+
+  var grad_assignment_list = "<h3>Project-related due-dates for 6.4212 students</h3> <ol>\n";
+  for (let i=0; i<grad_assignments.length; i++) {
+    let set = grad_assignments[i];
+    grad_assignment_list += "<li>" + set.title + "\n";
+    if ('grade' in set) {
+      grad_assignment_list += "&nbsp;<span style='font-size:smaller;'>(<i>" + set.grade + "</i>)</span>\n";
+    }
+    if ('due' in set) {
+      grad_assignment_list += "&nbsp;<span style='font-size:smaller;'>[Due: " + set.due + "]</span>\n";
+    }
+    grad_assignment_list += "</li>\n";
+  }
+  grad_assignment_list += "</ol>\n";
+  document.getElementById("grad_assignment_list").innerHTML = grad_assignment_list;
+</script>
+
+
+<script>
+  var calendar = `<h3>Calendar</h3>
+<table align="center" class="calendar" cellspacing="0" cellpadding="6" width="95%">
+
+<thead>
+  <tr>
+    <td width="16%">Monday</td><td width="26%">Tuesday</td>
+    <td width="20%">Wednesday</td><td width="26%">Thursday</td>
+    <td width="12%">Friday</td>
+  </tr>
+</thead>`;
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+  d = new Date(2023,8,4);  // Sep 5
+  var lec = 0;
+  var pset = 0;
+  var rec = 0;
+  while (d <= last_day_of_classes) {
+    calendar += "<tr>\n";
+    for (let i=0; i<5; i++) {
+      var e = events[d.getMonth()+1][d.getDate()];
+      var type = "";
+      var description = "";
+      if (e) { e.forEach(event => {
+        type = event.type;
+        description += "<span class=" + type + ">";
+        if (type == 'recitation') {
+          description += "<small>Recitation " + (rec+1) + ":</small> ";
+          rec++;
+        } else if (type == 'assignment') {
+          description += "<small>Problem Set " + (pset+1) + ":</small> ";
+          pset++;
+        }
+        if ("problems" in event) {
+            description += "<a href=\"" + event.problems + "\">" + event.description + "</a></span><br/>\n";
+        } else {
+            description += event.description + "</a></span><br/>\n";
+        }
+        if (event.details) {
+          description += '<div class="for_details" style="display:inline"><a href="' + event.details + '">(details)</a></div><div class="details"><iframe src="' + event.details + '" scrolling=yes height="800px" width="400px"></iframe></div>\n';
+        }
+      }); }
+      if ((i==1 || i==3) && (lec < lectures.length) && type != "holiday" && d >= first_day_of_classes && d <= last_day_of_classes) {
+        type = "lecture";
+        description += '<small>Lecture ' + (lec+1) + ":</small> " + lectures[lec].title;
+        lec++;
+      }
+
+      calendar += '<td class="' + type + '">';
+      calendar += '<span class="date">'+monthNames[d.getMonth()]+' '+ d.getDate()+'</span>\n';
+      calendar += "<br/>" + description;
+      calendar += "</td>\n"
+      d.setDate(d.getDate() + 1);
+    }
+    d.setDate(d.getDate() + 2);
+    calendar += "</tr>\n";
+  }
+  calendar += '</table>\n';
+  document.getElementById("calendar").innerHTML = calendar;
+</script>
+
+
+<hr>
+
+<!-- Footer -->
+<footer>
+    <p class="copyright text-muted">Copyright &copy 2018-2023, Robot Locomotion Group @ CSAIL</p>
+    <p class="copyright text-muted">Contact: manipulation-staff [AT] mit [dot] edu</p>
+</footer>
+
+</body>
+
+</html>

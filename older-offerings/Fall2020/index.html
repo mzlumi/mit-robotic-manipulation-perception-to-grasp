@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MIT 6.881 - Robotic Manipulation</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Theme CSS -->
+    <link href="css/clean-blog.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="index.html" style="text-decoration:none;">MIT 6.881 - Robotic Manipulation</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="index.html#description" style="text-decoration:none;">Description</a>
+                    </li>
+                    <li>
+                        <a href="index.html#information" style="text-decoration:none;">Information</a>
+                    </li>
+                    <li>
+		      <a href="index.html#readings/assignments" style="text-decoration:none;">Readings | Assignments</a>
+                    </li>
+                    <li>
+                        <a href="schedule.html" style="text-decoration:none;">Schedule</a>
+                    </li>
+                    <li>
+                        <a href="project.html" style="text-decoration:none;">Project</a>
+                    </li>
+                    <li>
+                        <a href="index.html#faq" style="text-decoration:none;">FAQ</a>
+                    </li>
+                    <li>
+                        <a href="index.html#people" style="text-decoration:none;">People</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+  </nav>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header"><!-- style="background-image: url('img/underactuated-bg-2.png')"> -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>Robotic Manipulation</h1>
+                        <h2>Perception, Planning, and Control</h2>
+
+                        <!-- <span class="subheading">Algorithms for Walking, Running, Swimming, Flying, and Manipulation</span> -->
+                        <hr class="small">
+                        <span class="subheading">Fall 2020</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                  <h2 class="section-heading" id="description">Course Description</h2>
+
+
+		  <p> Introduces the fundamental algorithmic approaches for creating
+		  robot systems that can autonomously manipulate physical objects in
+		  unstructured environments such as homes and warehouses.  Topics
+		  include perception (including approaches based on deep learning and
+		  approaches based on 3D geometry), planning (robot kinematics and
+		  trajectory generation, collision-free motion planning, task-and-motion
+		  planning, and planning under uncertainty), as well as dynamics and
+		  control (both model-based and learning-based).</p>
+
+		  <p>Homework assignments will guide students through building a
+		  software stack that will enable a robotic arm to autonomously
+		  manipulation objects in cluttered scenes (like a kitchen). Under the
+		  special circumstances of this Fall 2020 term, the class will be held
+		  entirely online, and will make heavy use of simulation. </p>
+
+          <p>This subject counts as an Artificial Intelligence concentration
+          subject for SB/MEng Students, but not yet as a TQE subject for graduate students.</p>
+
+        <h2 class="section-heading" id="information">Course Information</h2>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-4">
+
+                <h3>Class Time and Location</h3>
+                
+                <div style="font-size:16px">Fall semester 
+                (September - December, 2020) <br>
+                Tuesday, Thursday 2:30 - 4:00 pm <br>
+                <!--<a href="https://whereis.mit.edu/?go=24">24-121</a><br>-->
+                <br/>
+                The Zoom link is provided on piazza.<br/>
+                We will also live stream the lectures to <a href="https://www.youtube.com/channel/UChfUOAhz7ynELF-s_1LPpWg">YouTube</a> (with recordings available immediately after).<br/>
+                <br/>    
+                See <a href="schedule.html">class schedule</a> for complete details <br></div>
+
+                <p>
+                    <h3>Office Hours</h3>
+                    <div style="font-size:16px">
+                    Meng Feng (TA)<br> 
+                    Friday 3-4pm or Appointment by <a href="mailto: fengm@mit.edu"> email</a><br/>
+
+		    Terry Suh (TA)<br>
+		    Monday 2-3pm or Appointment by <a href="mailto: hjsuh@mit.edu"> email</a><br/>
+                    </div>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h3>Grading Policy</h3>
+                <div style="font-size:16px">
+                Assignments: 70%<br>
+                Final Project: 30%<br>
+                </div>
+                <div style="font-size:16px">No final exam.</p>
+                <div style="font-size:16px">Late assignments will be penalized 10% every 24 hours.  Additionally, we will grant a one time (one pset) extension of up to one week without penalty.</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h3>Prequisites</h3>
+                <div style="font-size:16px">Basic linear algebra, probability and algorithms.</div>
+                <div style="font-size:16px">Coding assignments will be in Python on Google's Colab.</div>
+
+                <p style="font-size:16px">See the <a href="#faq">FAQ</a> if you have any questions about prerequisites.</p>
+            </div>
+        </div>
+
+        <h3>Class Forums</h3>
+        <div style="font-size:16px"><a href="https://piazza.com/class/ke46k68dmz9172">Forums are on Piazza</a> (sign up with your @mit.edu email address).  If you do not have an @mit.edu address but believe you are eligible to participate via zoom/piazza, please contact the staff.</div>
+
+        <h3 id="access">Open Access</h3>
+
+        <div style="font-size:16px">All of the course
+        materials are freely available. </div> 
+        <ul style="font-size:16px"><li>Links to lecture
+        notes, problem sets, and additional resources will
+        be linked from the <a href="schedule.html">course
+        calendar</a>.</li><li>Zoom lectures will be live streamed on <a href="https://www.youtube.com/channel/UChfUOAhz7ynELF-s_1LPpWg">YouTube</a> (with recordings available immediately after).</li></ul>
+        <div style="font-size:16px">Students attending via Zoom/Piazza will have
+        a much higher bandwidth interaction with the staff -- including
+        interactive lectures with breakouts and face-to-face reviews for final
+        projects.  But we hope to actively engage with the anybody who wants to
+        spend time on the material.  Please ask us questions on the YouTube
+        lectures and/or via the annotation tool on the course textbook.</div>
+
+                        
+        <h2 class="section-heading" id="readings/assignments">Readings and Assignments</h2>
+
+        <hr>
+
+        <p> This is a new class and the <a href="http://manipulation.csail.mit.edu">"textbook"</a> is being written during this semester.  We will post relevant reading material <a href="schedule.html">refer to the schedule</a>.
+
+        <p> <b><em>Assignments</em></b> (to be released as they're assigned)<br>
+
+         <ul>
+            <li><a href="pset_0.html">Problem Set 0</a>. Due Wednesday, Sep. 9th, 2020, 11:59PM EDT </li>
+            <li><a href="pset_1.html">Problem Set 1</a>. Due Monday, Sep. 21st, 2020, 11:59PM EDT </li>            
+            <li><a href="pset_2.html">Problem Set 2</a>. Due Wedensday, Sep. 30th, 2020, 11:59PM EDT </li>      
+            <li><a href="pset_3.html">Problem Set 3</a>. Due Wedensday, Oct. 14th, 2020, 11:59PM EDT </li>
+            <li><a href="pset_4.html">Problem Set 4</a>. Due Wedensday, Oct. 28th, 2020, 11:59PM EDT </li>
+            <li><a href="pset_5.html">Problem Set 5</a>, Due Monday, Nov. 16th, 2020, 11:59PM EDT </li>
+            <li><a href="pset_6.html">Problem Set 6</a>, Due Monday, Nov. 30th, 2020, 11:59PM EDT </li>
+         </ul>
+
+
+        <p> Links and due dates for <a href="schedule.html">assignments will be on the schedule</a>.</p>
+
+        <p><b><em>Submission of Assignments</em></b><br>
+        We'll be using <a href="http://gradescope.com/">Gradescope</a> for problem set submission and grading. Each problem set is weighted equally. The login code for this class will be posted on Piazza -- please create an account and add yourself to this class using that code only if you are taking this class for credit. Grading will rely on submitted code passing an automated battery of tests, in combination with our review of your code and inline responses to questions. More details will be provided when assignments are released.</p>
+
+        <p><b><em>Collaboration Policy</em></b><br>
+        Collaboration is encouraged, but the work you submit for assignments is expected to be <em>entirely your own</em>. That is, the writing and code must be yours, and you must fully understand everything that you hand in. Discussing the details of how to solve a problem is fine, but you must write the solution yourself. To avoid plagiarizing, you shouldn't be looking at someone else's solution while you write down your own. If you collaborated significantly (use your own discretion for "significantly") on a problem, list the people you collaborated with next to your solution. </p>
+        <hr>
+
+        <h2 class="section-heading" id="final-projects">Final Projects</h2>
+
+        <p>The final project will be your opportunity to explore
+            some of the topics introduced in the course more
+            deeply; either in simulation or on real hardware.</p>
+
+        <p> Details about the final projects are availble on <a href="project.html">this page</a>
+        </p>
+
+            <hr>
+            <h2 class="section-heading" id="faq">FAQ</h2>
+
+            <p><em><b>I don't have any robotics experience, is it okay
+            if I take the class?</b></em></br> Yes. The course is
+            designed to not assume any prior experience with robotics.
+            If you have plenty of robotics experience, that's great too.</p>
+
+            <p><em><b>What will assignments be like?</b></em></br>
+            The assignments will comprise a mix of hand-written math and programming.  These will be approximately weekly, and for approximately only the first half of the term.  During the second half we will ask you to focus on your final project. </p>  
+
+            <p>Programming assignments will be in Python and will feature use of <a href="http://drake.mit.edu/">Drake</a>, a toolbox for planning, control and analysis for robotics. Drake was developed out of the <a href="http://groups.csail.mit.edu/locomotion/">Robot Locomotion Group</a> and its development is now led by <a href="http://www.tri.global/">Toyota Research Institute</a>.</p>
+
+            <p>All assignments (both hand-written components and programming components) will be graded using Gradescope.</p>
+
+            <p><em><b>I am not sure if I fit the prerequisites, what should I do?</b></em></br>
+            <p>Please speak to a staff member.</p>
+
+
+            <p><em><b>What can I do to best prepare for success in the class?</b></em></br>
+            The course takes a rigorous mathematical and algorithmic approach to robotics.  The only required prerequisites are basic familiarity with linear algebra.  If you work hard, we can teach you the rest.</p>
+
+            <p>If, however, you would like to prepare as best as possible, here is what the course TAs recommend:
+            <ul>
+                <li>Linear Algebra:</li>
+                <ul>
+                    <li>A strong, intuitive understanding of Linear Algebra will very much help you with this class.  If off the top of your head you don't remember what the <u><a href="https://en.wikipedia.org/wiki/Rank_(linear_algebra)">rank of a matrix</a></u> is, or how to do <u><a href="https://en.wikipedia.org/wiki/Singular-value_decomposition">Singular Value Decomposition</a></u>, we recommend you review your linear algebra. The entire world of robotics is rich in linear algebra -- you will not regret investing time in mastering fundamentals!</li>
+                    <li>To brush up on linear algebra, the content and video lectures from Gilbert Strang's classic course, <u><a href="https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/index.htm">MIT 18.06</a></u> have helped many students in the past.</li>
+                    <li>If you are interested in the a more theoretical treatment, that is still very approachable, consider  <em>Linear Algebra Done Right</em> by Sheldon Axler.</li>
+                </ul>
+			<!--
+                        <li>Differential Equations (ODEs)</li>
+                        <ul>
+                            <li>While a strong understanding of differential equations will only help you, if you have not taken a full Diff EQ course before, you will probably be okay with just understanding the basics.</li>
+                            <li>The <u><a href="https://www.khanacademy.org/math/differential-equations">Differential Equations content at Khan Academy</a></u> should be enough to get you going in the class -- you can learn the rest as you go.</li>
+                        </ul>
+                        <li>Nonlinear Dynamics</li>
+                        <ul>
+                            <li>While not a prerequisite, a fantastic textbook for an introduction to nonlinear dynamics is the textbook <em>Nonlinear Dynamics and Chaos</em> by Steven Strogatz.</li>
+                        </ul>
+			-->
+                        <li>Programming in Python</li>
+                        <ul>
+                            <li>If you are somewhat familiar with Python but would like to brush up on syntax, this <u><a href="http://cs231n.github.io/python-numpy-tutorial/">tutorial from Stanford CS231n</a></u> provides a good overview.</li>
+                            <li>If you are an absolute beginner with Python, <u><a href="https://www.codecademy.com/">Codecademy</a></u> provides a friendly introduction.</li>
+                            <li>Although you will not need to know C++ for the class, you might be happy to know that the <u><a href="http://drake.mit.edu/">underlying software</a></u> is written in C++, and is very suitable for use in mature engineering pipelines.</li>
+                        </ul>
+                        <li>Mathematical Optimization</li>
+                            <ul>
+                                <li>We will make some use of mathematical
+                                optimization, and hope to teach you most of what
+                                you need to know.  But acquiring a background in
+                                the subject will help you deepen understanding.
+                                If you know the following acronyms, you are
+                                totally set: LP, QP, MIP, SDP.</li>
+                                <li><u><a href="http://ee364a.stanford.edu/videos.html">Video lectures on Convex Optimization</a></u> by Stephen Boyd are an excellent resource, as is the reference textbook <em>Convex Optimization</em> by Boyd and Vandenberghe.</li>
+                            </ul>
+                        <li>Machine Learning</li>
+                        <ul>
+                          <li>Basic background in Machine Learning will help.  <a href="https://introml.mit.edu/fall18"> 6.036 </a> is a good introduction.  There are also many great introductory classes online, <u><a href="https://www.coursera.org/learn/machine-learning">Andrew Ng's</a></u> is one.  
+                        </ul>
+                        <li>Robotics</li>
+                        <ul>
+                            <li>You will not need any prior robotics exposure to succeed in the class. If however you want to start absorbing fundamentals (frame transformations, manipulator equations, etc.) then <em>Introduction to Robotics: Mechanics and Control</em> by John Craig is a good reference.  <a href="http://hades.mech.northwestern.edu/index.php/Modern_Robotics">Modern Robotics</a> is also free online and has excellent video lectures.</li>
+                        </ul>
+                    </ul>
+                    <hr>
+
+                    <h2 class="section-heading" id="people">People</h2>
+
+                    <p>You can contact the course staff at: manipulation-staff [AT] mit [DOT] edu</p>
+
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 text-center">
+                            <div class="service-box">
+                                <h4>Instructor</h4>
+                                <img height="300" src="img/russ_tedrake_2014.jpg"/>
+                                <p class="text-muted"><a href="https://groups.csail.mit.edu/locomotion/russt.html">Russ Tedrake</a></p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 text-center">
+                            <div class="service-box">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 text-center">
+                            <div class="service-box">
+                                <h4>Teaching Assistant</h4>
+                                <img height="300" src="img/terry.jpg"/>
+                                <p class="text-muted"><a href="https://hjrobotics.net">Terry (Hyung Ju) Suh</a></p>                                
+                                <h4>Teaching Assistant</h4>
+                                <img height="300" src="img/mfeng.jpg"/>
+                                <p class="text-muted"><a href="https://github.com/mfeng9">Meng Feng</a></p>                                
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </article>
+
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <p class="copyright text-muted">Copyright &copy 2020-2020, Robot Locomotion Group @ CSAIL</p>
+                    <p class="copyright text-muted">Web design with Bootstrap
+                      | Contact: manipulation-staff [AT] mit [dot] edu</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Theme JavaScript -->
+    <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MIT 6.800/6.843 - Robotic Manipulation</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Theme CSS -->
+    <link href="css/clean-blog.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="index.html" style="text-decoration:none;">MIT 6.800/6.843 - Robotic Manipulation</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="index.html#description" style="text-decoration:none;">Description</a>
+                    </li>
+                    <li>
+                        <a href="index.html#information" style="text-decoration:none;">Information</a>
+                    </li>
+                    <li>
+		      <a href="index.html#readings/assignments" style="text-decoration:none;">Readings | Assignments</a>
+                    </li>
+                    <li>
+                        <a href="schedule.html" style="text-decoration:none;">Schedule</a>
+                    </li>
+                    <li>
+                        <a href="project.html" style="text-decoration:none;">Project</a>
+                    </li>
+                    <li>
+                        <a href="index.html#faq" style="text-decoration:none;">FAQ</a>
+                    </li>
+                    <li>
+                        <a href="index.html#people" style="text-decoration:none;">People</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+  </nav>
+
+
+<!-- Post Content -->
+<article>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <h2 class="section-heading" id="assignment_schedule">Final Project</h2>
+
+            <p> The final project will be your opportunity to take what you learned in the class and put it towards a project of your choice.</p>
+
+            <p> Here are some guidelines: </p>
+
+            <ul>
+                <li>
+                    Apart from rare exceptions, your problem should be directly relevant to manipulation.
+                </li>
+                <li>
+                    You are welcome to work on the project in small teams (2-3 people). If you plan on doing a team project, please make this clear in your proposal. Our expectations for your project will be proportional to the number of people on the team.
+                </li>
+                <li>
+                    The project is only over 4-5 weeks, so scope your project carefully.
+                </li>
+                <li>
+                    Developing novel algorithms/methods is great, but reimplementing published work and/or applying a published method to a manipulation system is also great. You will be evaluated based on whether the project forced you to understand new concepts, not based on the novelty of the approach.
+                </li>
+                <li>
+                    Do not underestimate the time it can take to set up a simulation in place. Using/modifying an existing example from the textbook is great. Using Drake is not a requirement, but the staff can help you more if you choose this route.
+                </li>
+                <li>
+                    Some of you will be able to do a project that is closely related to your current research. This is completely acceptable, as long as the subproblem you are solving is clearly defined. If you are using part or all of your work for research or as a part of another class, you must state this explicitly in your final report. We expect you to do something new that you would not have done if you hadn't taken this class (e.g. I was working on motion planning for a mobile robot, but tried to do it for manipulation)
+                </li>
+                <li>The goal of the project is to deepen each student's mastery of some topic from class.  If you do work in a similar field, and submit an incremental paper in that line of work that makes no connections to the class material, then that does <i>not</i> constitute a successful project.</li>
+                <li>
+                    We encourage you to build on code and tools of the community, but remember that you must clearly distinguish your contribution and acknowledge the work of others to avoid plagiarism. If you do improve an open-source tool or example, consider contributing back!
+                </li>
+                <li>You can find some great final projects from previous semesters <a href="https://manipulation.csail.mit.edu/misc.html#projects">here</a>.  I would love to add your work to the list!</li>                
+            </ul>
+
+            The course staff will provide you with feeback on the scope on direction of your proposal shortly after we receive it. 
+
+            <h2 class="section-heading" id="assignment_schedule">Project Ideas</h2>
+
+            Here are a set of ideas we believe might be worth investigating, but do not feel the need to grab one of these! This is a placeholder, and the list will grow as we add more suggestions soon.
+
+            <ul>
+                <li>
+                    Using everything we learned, implement a full-stack system (from perception, planning, and control) that can reliably solve a small-scale application in manipulation.
+                    <ul>
+                        <li> Pick-and-place clutter clearing of YCB objects. </li>
+                        <li> Opening a cupboard and grabbing a mug. </li>
+                        <li> Solving a peg-in-hole assembly problem. </li>
+                        <li> Using a tool (hammer, squeegee, pencil, etc.) to achieve a task. </li>
+                    </ul>
+                </li>
+                <li> 
+                    Choose a specific subproblem in manipulation (impedance control, pose estimation, motion planning, task-and-motion planning) and implement / benchmark existing methods. 
+                    <ul>
+                        <li> Pose Estimation: There have been impressive results that use deep learning in order to do object pose estimation, such as <a href="http://www.roboticsproceedings.org/rss14/p19.pdf">Pose-CNN</a>. How do these compare with ICP-like pose estimators?</li>
+                        <li> Motion Planning: Motion planning has a very rich literature comparing and combining sampling-based methods and optimization-based methods. Which ones are better suited for manipulation, and how should we combine them?</li>
+                        <li> Impedance Control: There is a rich <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.13.6809&rep=rep1&type=pdf">variation</a> of approaches regarding the theme of impedance control (stiffness control, admittance control, force control, etc). Which ones are suited for which tasks? Can we benchmark their performance on a single task?</li>
+                    </li>
+                    </ul>
+                </li>
+                <li>
+                    Object State representation: implement and compare different representations for objects and reason about what class of tasks each representation is suited for.
+                </li>
+                <li>
+                    Robust (generalizable) manipulation: using computational tools from class such as Reinforcement Learning / impedance control, can you write / synthesize controllers that generalize to variations in objects such as:
+                    <ul>
+                        <li> variations in object category </li>
+                        <li> variations in object geometry </li>
+                        <li> variations in object mechanical properties (friction, weight, etc.) </li>
+                    </ul>
+                </li>
+                <li>
+                    Try a model-based approach to a manipulation problem of your choice. Good examples are:
+                    <ul>
+                        <li> Contact-implicit Trajectory Optimization for <a href="https://dspace.mit.edu/bitstream/handle/1721.1/124395/Posa12.pdf">multi-finger contact.</a></li>
+                        <li> Hybrid-MPC for the <a href="https://arxiv.org/abs/1611.08268">pusher-slider system</a></li>
+                    </ul> 
+                </li>
+                <li>
+                    Deformable object manipulation: how would you manipulate a relatively deformable object such as a rope / shirt / pile of onions? (Note: there is limited support for soft bodies in Drake, so simulation may be a bottleneck if you decide to go this route. There are specific cases (ropes / onions) where the staff might have software availble for simulation.)
+                </li>
+            </ul>
+
+            <h2 class="section-heading" id="assignment_schedule">Project Proposal</h2>
+
+            The project proposal is intended as a forcing function for you to crystalize a project idea. Moreover, it gives us a
+            chance to offer you a feedback and make sure that your plan is feasible in the time allotted to the project. The first
+            draft (for 6.800 students) should be ~500-750 words, and the final version ~1000 words. It should detail your idea for the
+            project, and:
+
+            <ul>
+                <li>
+                    Define exactly what the project deliverable is.
+                </li>
+                <li>
+                    Briefly describe why the project is interesting.
+                </li>
+                <li>
+                    List the topics that we have studied (or that we will study) in class that are covered by your project. For example: kinematics, deep/geometric perception, force control, motion planning, etc.
+                </li>
+                <li>
+                    Discuss any related prior work you have found that is relevant. <b>If this project is related to your research or a project you are doing concurrently for another class</b>, tell us about that now (and read the guidelines for the final report below)..
+                </li>
+                <li>
+                    Define specific goals that you expect to have accomplished before each of the progress updates.
+                </li>
+
+                It does not have to be extremely polished, but it does need to provide us with enough information to understand what you are hoping to do. Otherwise, we won't be able to help you!
+            </ul>
+            
+            
+            <h2 class="section-heading" id="assignment_schedule">Progress Updates</h2>
+            
+            We will request short (~1 paragraph) project updates some of the problem sets in order to keep us up to date with how you have progressed.  6.800 students will have scheduled interactions with the CI-M staff.  All students should reach out to the technical staff to discuss their projects/progress.
+
+            <h2 class="section-heading" id="assignment_schedule">Final Presentation</h2>
+
+            The project presentation is due by:  <b>Wednesday, Dec 8.</b> Extensions may be granted on request. The presentation must have duration of 3 minutes for individual projects, 4 minutes for two-person projects and 5 minutes for three-person projects. For group presentations, please try to share the time evenly between the various members of the group. This year we will require you to upload presentations on Youtube, more details will follow on Piazza. 
+
+            <h2 class="section-heading" id="assignment_schedule">Final Report</h2>
+
+            We expect you to provide a final report of your project by <b>Wednesday, Dec 8.</b> Using the <a href="https://www.ieee.org/conferences/publishing/templates.html">IEEE Template for conference proceedings</a> (probably the LaTeX one, unless you really enjoy using MS Word), write a summary of what you accomplished during your project. Write it, as much as possible, like a conference paper. You should include:
+
+            <ul>
+                <li>An abstract.</li>
+                <li>An introduction of your project and why you think it is interesting.</li>
+                <li>A related work / literature review section</li>
+                <li>Your results (partial or work-in-progress is expected, and completely fine!)</li>
+                <li>A discussion of your results and potential next steps</li>
+                <li> For team projects: <b>please describe the contributions made by each team member</b>.
+                <li> For projects related to your research or a project in another class, <b>please clearly denote what parts of the project overlap  (or not) with the other efforts</b>.
+            </ul>
+
+            For projects that do overlap with your research, please make connections to the topics in the class.  A report that might have been written if you had not taken the class does not constitute a successful project.  The goal of the project is to demonstrate some level of mastery of the material from class.</p>            </ul>
+
+            The report is worth a very large portion of your overall grade, so be as thorough as possible in demonstrating mastery of the course material. The report may range between 1500-4500 words (longer reports are expected when you are working collaboratively), not counting figures and references. Videos are encouraged as well, as a way to showcase simulation/hardware results and provide visual explanation.
+ 
+    </div>
+</div>
+</div>
+</article>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <p class="copyright text-muted">Copyright &copy 2019-2021, Robot Locomotion Group @ CSAIL</p>
+                    <p class="copyright text-muted">Web design with Bootstrap | Contact: manipulation-staff [AT] mit [dot] edu</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Theme JavaScript -->
+    <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
