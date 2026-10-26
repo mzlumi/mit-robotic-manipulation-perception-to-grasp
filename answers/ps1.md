@@ -36,7 +36,7 @@ Going further: a snake has many joints but few actuated ways to move its body as
 | 7.4 P control of the 1D body, gain 10 | **C**: oscillates with growing amplitude. The error grows from 1.1 m in the first 2 s to 9.3 m in the last 2 s. Forward Euler on an undamped oscillator adds energy every step. |
 | 8.1 Why the velocities plateau | **D**: joint damping balances the force. The final velocity is (0.40, 0.10) m/s = F / b exactly. |
 | 8.2 Settling time to (0.9, 0.6), gain 100 | **about 1.7 s** (within 1 mm and 1 mm/s from 1.73 s; within 10 mm and 10 mm/s from 1.32 s) |
-| 8.3 Path length around SQUARE (damping 20, gain 100, 5 s) | ε = 0.1: **2.1507** m; ε = 0.01: **2.3719** m |
+| 8.3 Path length around SQUARE (damping 20, gain 100, 5 s) | ε = 0.1: **2.2520** m; ε = 0.01: **2.3768** m, with the follower at its default 0.1 s period. With a follower checking every 0.01 s (my first version), 2.1507 and 2.3719 m: checking less often lets the finger run on past ε before it switches, which lengthens the path. |
 | 9.1 Zero torque | **C**: it swings down like a multi-link pendulum |
 | 9.2 20 N·m on every joint | **D**: the joints wind up against their limits (final q = [2.97, 2.09, 2.97, 1.72, 2.97, 2.09, 3.05], v = 0) |
 | 9.3 P control, gain 100 | **C**: it oscillates around a gravity-sagged pose (q2 sags about 0.75 rad), with amplitude slowly decreasing |
@@ -77,4 +77,4 @@ On the square (kp = 10⁴): kd = 300 rings badly (max 441 mm off the square). kd
 
 - `DTVectorSystem`: the state is whatever the next-state function needs, and the output is a function of state (and of input, when declared). Body1D has state (x, v) and output x. PController and Observer are stateless, with output depending on input. The waypoint follower's state is the index of the current waypoint, and its output depends only on that state, which is what breaks the algebraic loop when it is wired around the plant.
 - dt appears in the physics (Euler step) and in the PD controller (finite-difference velocity). It does not appear in the P controller, which is memoryless. For the follower, dt only sets how often it checks for arrival.
-- Larger ε cuts corners and shortens the path (2.15 m at ε = 0.1 versus 2.37 m at 0.01). With low gain, a small ε makes the follower wait at each corner until the slow, sagging controller gets inside ε.
+- Larger ε cuts corners and shortens the path (2.25 m at ε = 0.1 versus 2.38 m at 0.01, against 2.4 m for the square itself). With low gain, a small ε makes the follower wait at each corner until the slow, sagging controller gets inside ε.

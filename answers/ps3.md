@@ -33,7 +33,7 @@ Going further: at 2 rad/s heading for the limit, the one-step position constrain
 **Problem 6.** **19** = 3 (platform x, y, θ) + 2 × 7 (arms) + 2 (one coupled opening per gripper). Going further: no. Locked openings can make a narrow passage impassable that a closed gripper would fit through.
 
 **Problem 7.**
-- 7.1 Grid search: resolution complete for **all**; practical for **some** (low-dimensional domains only).
+- 7.1 Grid search: complete for **none** (a grid can step over a passage narrower than its cells, so failure proves nothing); resolution complete for **all**; practical for **some** (low-dimensional domains only).
 - 7.2 PRM/RRT: complete for **none**; probabilistically complete for **all**; practical for **all**.
 
 Going further: no, failure to find a path is not a proof that none exists. A narrow passage has tiny measure, so the probability of sampling it in a finite run can be very small.

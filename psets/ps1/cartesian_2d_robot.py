@@ -273,7 +273,7 @@ def create_2d_robot_diagram_with_waypoints(
     builder = DiagramBuilder()
     plant = _add_2d_robot(builder, meshcat)
     observer = builder.AddSystem(Observer(4, [0, 1]))
-    follower = builder.AddSystem(SimpleTrajectoryFollower(waypoints, epsilon, dt=0.01))
+    follower = builder.AddSystem(SimpleTrajectoryFollower(waypoints, epsilon))
     controller = builder.AddSystem(PController2(2, controller_gain))
     builder.Connect(plant.get_state_output_port(), observer.get_input_port())
     builder.Connect(observer.get_output_port(), follower.get_input_port())

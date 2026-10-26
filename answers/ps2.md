@@ -79,7 +79,7 @@ Going further:
 
 **Problem 9.**
 - 9.1 **1**.
-- 9.2 The **first** (in non-singular configurations, infinitely many) and **third** (null space of dimension > 0 gives infinitely many).
+- 9.2 Only the **first** (in non-singular configurations, infinitely many). My first answer also ticked the third, but for a redundant robot "the null space has dimension > 0" holds in every configuration, so the third says the same as the second, which is false: at a singularity some velocities have no solution at all. (Corrected after the comparison with the official solutions.)
 - 9.3 **When the Jacobian is rank-deficient.**
 - 9.4 **All five.**
 
