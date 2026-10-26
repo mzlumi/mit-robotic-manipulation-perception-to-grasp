@@ -1,0 +1,10 @@
+RRT-Connect took 0.1 s
+RRT-Connect: 24 waypoints after 45 iterations, path length 5.71 rad
+RRT-Connect: IN COLLISION at [ 0.322  0.424 -0.09  -1.797  0.054  0.526  1.345], checked every 0.1 deg
+playback: the arm touched nothing
+RRT          outer iterations per trial: [98, None, None, None, 452, None, None, 222, 535, None]
+             planning seconds per trial (excluding recheck): [0.122, 2.364, 2.702, 2.742, 1.098, 3.333, 2.899, 0.308, 1.155, 1.947]
+             passed finer sampled check at 0.1 deg: 4 of the 4 paths found
+RRT-Connect  outer iterations per trial: [13, 29, 23, 84, 71, 13, 49, 14, 27, 11]
+             planning seconds per trial (excluding recheck): [0.047, 0.063, 0.06, 0.161, 0.123, 0.049, 0.111, 0.038, 0.086, 0.048]
+             passed finer sampled check at 0.1 deg: 9 of the 10 paths found

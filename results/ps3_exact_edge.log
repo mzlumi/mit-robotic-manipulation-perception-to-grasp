@@ -1,0 +1,29 @@
+== test1
+joint radii r_j (m): [1.121 1.121 0.722 0.722 0.322 0.322 0.077]
+rho = 1.942 m/rad
+clearance at q_start: 6.4 cm
+clearance at q_goal:  1.3 cm
+an EDGE_STEP is up to 0.0462 rad long, and is sound if samples keep 4.5 cm clear
+== test2
+RRT-Connect: 23 waypoints after 55 iterations, path length 5.39 rad
+RRT-Connect: passed finer sampled collision check, checked every 0.1 deg
+returned-path check times: adaptive 0.324 s; fixed-step 0.008 s
+adaptive checker rejected 2 of 22 edges (sample rejection threshold: 5 mm)
+returned-path adaptive check: 258 clearance queries and 256 collision queries; a full fixed-step recheck would use 237 collision queries
+== test3
+RRT-Connect with the exact check took 717 ms
+RRT-Connect: 28 waypoints after 41 iterations, path length 6.64 rad
+RRT-Connect: passed finer sampled collision check, checked every 0.1 deg
+RRT-Connect with the exact check took 872 ms
+RRT-Connect: 25 waypoints after 66 iterations, path length 5.91 rad
+RRT-Connect: passed finer sampled collision check, checked every 0.1 deg
+RRT-Connect with the exact check took 460 ms
+RRT-Connect: 23 waypoints after 31 iterations, path length 5.50 rad
+RRT-Connect: passed finer sampled collision check, checked every 0.1 deg
+RRT-Connect with the exact check took 510 ms
+RRT-Connect: 30 waypoints after 45 iterations, path length 6.97 rad
+RRT-Connect: passed finer sampled collision check, checked every 0.1 deg
+RRT-Connect with the exact check took 613 ms
+RRT-Connect: 33 waypoints after 43 iterations, path length 7.91 rad
+RRT-Connect: passed finer sampled collision check, checked every 0.1 deg
+finer recheck failed for 0 of 5 returned paths (5 trials)

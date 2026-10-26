@@ -1,0 +1,16 @@
+# Python 3.13, as in the course handouts README (section 3.3).
+drake
+manipulation[letter]
+scipy
+rtree
+trimesh
+torch
+diffusers
+einops
+zarr
+gdown
+pymunk
+gymnasium
+pandas
+ipykernel
+pytest

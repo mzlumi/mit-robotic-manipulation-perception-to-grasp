@@ -1,0 +1,54 @@
+== 6.2 supplied 30-pair cart-pole study
+   n_pairs: 30
+   mean_difference: 39.10033333333333
+   paired_bootstrap_ci95: [23.189625000000003, 58.34248333333333]
+   paired_t_statistic: 4.289600804987821
+   paired_t_p: 0.0001813209286408637
+== 7.3 BC fit
+Running cautious_bc: /Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/results/cautious_push/cloning
+{'loss': 0.03948498144745827, 'face_accuracy': 0.9954751133918762, 'distance_mae_cm': 0.12844857573509216}
+   fit seconds: 2.400558124994859
+== 7.6 one PPO update
+   {'transitions': 185, 'episodes': 16, 'theta': 0.6909177303314209, 'collection_seconds': 172.60367929097265}
+Running recorded_ppo_update: /Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/results/cautious_push/short_update
+{'initial_theta': 0.6909177303314209, 'updated_theta': 0.7280263900756836, 'transitions': 185, 'episodes': 16, 'optimizer_steps': 12, 'kl_stopped': False, 'approx_kl': 0.0019499389454722404, 'update_seconds': 0.025359792169183493, 'interpretation': 'One update on a fixed recorded on-policy batch; no claim of improved task performance from this one update.'}
+== 7.8 exploratory runs
+         method  training_seed  success    reward  execution_seconds     pushes  distance
+0            bc            NaN      1.0  1.832051          87.924062  14.296875  0.014518
+1    bc_sampled            NaN      1.0  1.811157          88.260937  14.828125  0.016641
+2  residual_ppo          150.0      1.0  2.367572          61.621875   9.578125  0.013096
+3  residual_ppo          151.0      1.0  2.312075          64.095938  10.031250  0.013999
+4  residual_ppo          152.0      1.0  2.315800          63.943438  10.000000  0.013897
+             policy  success    reward  execution_seconds     pushes  distance
+0                bc      1.0  1.832051          87.924062  14.296875  0.014518
+1        bc_sampled      1.0  1.811157          88.260937  14.828125  0.016641
+2          midpoint      1.0  2.159428          71.575625  11.302083  0.014456
+3             final      1.0  2.331816          63.220417   9.869792  0.013664
+4           sampled      1.0  2.292078          64.762292  10.171875  0.014999
+5          selected      1.0  2.331816          63.220417   9.869792  0.013664
+6  midpoint_sampled      1.0  2.127168          72.922292  11.744792  0.015255
+{'difference': -8.355208333332433, 'ci95': [-9.583440104165946, -7.304546874999254], 'goals': 64, 'interpretation': 'Across paired goals, conditional on these fitted policies. These goals are not independent training runs.'}
+{'difference': 0.4809208079904357, 'ci95': [0.43327389958059837, 0.5383033616686898], 'goals': 64, 'interpretation': 'Across paired goals, conditional on these fitted policies. These goals are not independent training runs.'}
+== 7.8 confirmatory runs
+          method  training_seed  success    reward  execution_seconds     pushes  distance
+0             bc            NaN      1.0  1.820531          86.876562  14.140625  0.015629
+1     bc_sampled            NaN      1.0  1.835964          86.076875  14.359375  0.015713
+2   residual_ppo          250.0      1.0  2.307844          63.139375   9.890625  0.013743
+3   residual_ppo          251.0      1.0  2.311126          62.984688   9.859375  0.013715
+4   residual_ppo          252.0      1.0  2.336717          62.329375   9.734375  0.011842
+5   residual_ppo          253.0      1.0  2.344541          62.063750   9.687500  0.011466
+6   residual_ppo          254.0      1.0  2.262586          65.277813  10.234375  0.014117
+7   residual_ppo          255.0      1.0  2.266982          65.094375  10.187500  0.014008
+8   residual_ppo          256.0      1.0  2.246796          66.111875  10.406250  0.013983
+9   residual_ppo          257.0      1.0  2.326485          62.761250   9.812500  0.012082
+10  residual_ppo          258.0      1.0  2.330149          62.453438   9.765625  0.012455
+11  residual_ppo          259.0      1.0  2.263031          65.278125  10.234375  0.014049
+             policy  success    reward  execution_seconds     pushes  distance
+0                bc      1.0  1.820531          86.876562  14.140625  0.015629
+1        bc_sampled      1.0  1.835964          86.076875  14.359375  0.015713
+2          midpoint      1.0  2.135191          71.538219  11.373437  0.014445
+3             final      1.0  2.299626          63.749406   9.981250  0.013146
+4           sampled      1.0  2.264361          64.844344  10.215625  0.015151
+5          selected      1.0  2.299825          63.718875   9.973437  0.013208
+6  midpoint_sampled      1.0  2.130802          71.710844  11.514062  0.014585
+{'n': 10, 'differences': [0.487313045863182, 0.4905943483260784, 0.5161850804693815, 0.5240094837466245, 0.4420540698600002, 0.4464504526077646, 0.4262647847209746, 0.5059536067095349, 0.509617444713748, 0.442499648353591], 'difference': 0.479094196537088, 'training_seed_sd': 0.03623029575897212, 'ci95': [0.45721325511886746, 0.4998097394763513], 't': 41.81663006298724, 'df': 9, 'p': 1.2752884253315313e-11, 'exact_sign_p': 0.001953125, 'interpretation': 'Across independent PPO training runs, conditional on the supplied BC and fixed test goals.'}

@@ -1,0 +1,11 @@
+{
+  "initial_theta": 0.6909177303314209,
+  "updated_theta": 0.7280263900756836,
+  "transitions": 185,
+  "episodes": 16,
+  "optimizer_steps": 12,
+  "kl_stopped": false,
+  "approx_kl": 0.0019499389454722404,
+  "update_seconds": 0.025359792169183493,
+  "interpretation": "One update on a fixed recorded on-policy batch; no claim of improved task performance from this one update."
+}

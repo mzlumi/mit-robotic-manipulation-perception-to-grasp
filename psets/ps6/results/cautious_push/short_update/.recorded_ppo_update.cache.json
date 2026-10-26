@@ -1,0 +1,33 @@
+{
+  "status": "complete",
+  "specification": {
+    "inputs": {
+      "/Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/data/cautious_push/update_batch.json": "fe72af4a006add63c06883c26fb1fcf7999179b13a5ea7b8b9006894f1d2a1dc",
+      "/Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/data/cautious_push/update_batch.npz": "b9c154902a83c672d255b2b2a1dfe52538dac357e5fa0d0ff61406b7d67876b0",
+      "/Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/data/cautious_push/update_start.pt": "ac085944a68a8f94338fe9576813617e898ed3645e084ed56a24193218dce97b",
+      "/Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/push_math.py": "c2702e29bbbda93ca2a4304c256b8208fdb92736ec7f75d2f0a1d2938bf02199",
+      "/Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/push_policy.py": "2fef72e8714dc9ca7d09f3607ef01ea719f5fe18991cc784b85a2ae8c15149cc",
+      "/Users/p4/Projects/mit-robotic-manipulation-perception-to-grasp/psets/ps6/residual_push.py": "921070c71c67acf3de53970933195b7a4b2156018a1327c12f87c69bee584f4b"
+    },
+    "settings": {
+      "clip": 0.1,
+      "epochs": 4,
+      "gae_lambda": 0.95
+    }
+  },
+  "artifacts": {
+    "update.json": "22bdfe06ce10feee4d7afce1958b100b4a4c5fff3b30a34c2b9379694cafc56f",
+    "update.pt": "55af8c5720538b4be0710cd87d7d3899b9b7b05284b870de6e7b20b55c64f8b4"
+  },
+  "result": {
+    "initial_theta": 0.6909177303314209,
+    "updated_theta": 0.7280263900756836,
+    "transitions": 185,
+    "episodes": 16,
+    "optimizer_steps": 12,
+    "kl_stopped": false,
+    "approx_kl": 0.0019499389454722404,
+    "update_seconds": 0.025359792169183493,
+    "interpretation": "One update on a fixed recorded on-policy batch; no claim of improved task performance from this one update."
+  }
+}

@@ -1,0 +1,25 @@
+test1
+10 of 20 attempts succeeded.
+costs: 10.13, 10.13, 10.15, 10.49, 45.89, 52.00, 140.18, 149.22, 210.43, 236.39
+test2
+Succeeded on attempt 1 of 20.
+Succeeded on attempt 1 of 20.
+  [-0.83  0.18  1.4 ] -> fixed base solved, free base solved
+Succeeded on attempt 1 of 20.
+Succeeded on attempt 1 of 20.
+  [-0.83  0.5   1.4 ] -> fixed base solved, free base solved
+No solution in 20 attempts.
+Succeeded on attempt 1 of 20.
+  [-0.83  1.3   1.4 ] -> fixed base no solution found in 20 attempts, free base solved
+No solution in 20 attempts.
+No solution in 20 attempts.
+  [-0.83  0.18  2.3 ] -> fixed base no solution found in 20 attempts, free base no solution found in 20 attempts
+test3
+Succeeded on attempt 5 of 20.
+  [-1.23  0.05  0.  ] -> solved
+Succeeded on attempt 1 of 20.
+  [-1.5 -0.2  0. ] -> solved
+No solution in 20 attempts.
+  [-1.8  0.2  0. ] -> no solution found in 20 attempts
+Succeeded on attempt 2 of 20.
+  [-1.4  0.3  0. ] -> solved
