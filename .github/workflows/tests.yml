@@ -16,6 +16,6 @@ jobs:
       - name: Install
         run: |
           pip install torch --index-url https://download.pytorch.org/whl/cpu
-          pip install drake "manipulation[letter]" scipy rtree trimesh pandas pytest
+          pip install drake "manipulation[letter]" scipy rtree trimesh pandas gymnasium pytest
       - name: Run tests
         run: pytest -q tests
