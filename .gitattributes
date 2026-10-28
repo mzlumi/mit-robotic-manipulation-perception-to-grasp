@@ -1,0 +1,9 @@
+# Keep the archived course materials and Meshcat replays out of GitHub's language stats
+textbook/** linguist-vendored
+lectures/** linguist-vendored
+solutions/** linguist-vendored
+project/** linguist-vendored
+course-site/** linguist-vendored
+older-offerings/** linguist-vendored
+problem-sets-fall2026/** linguist-vendored
+*.html linguist-generated
