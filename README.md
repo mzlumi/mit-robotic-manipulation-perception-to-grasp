@@ -4,8 +4,6 @@
 
 My solutions to all six problem sets of **MIT 6.4210/6.4212 Robotic Manipulation** (Fall 2026, Russ Tedrake and Tomas Lozano-Perez). I worked the graduate (6.4212) version: every bookwork question, every computational question, and the extra graduate problems. The code is Python with [Drake](https://drake.mit.edu), on a simulated KUKA iiwa with a Schunk WSG gripper. Every graded number in the answers is produced by a script in this repository, and the core functions are covered by a pytest suite that runs in GitHub Actions.
 
-**This repository is private.** The course staff ask students not to publish homework solutions, and the course archive here includes official solutions. Please do not share it further.
-
 ## Summary
 
 | Set | Topic | What I built | Headline result |
